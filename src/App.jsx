@@ -9,9 +9,9 @@ import Process from "./components/Process";
 import Testimonials from "./components/Testimonials";
 import Gallery from "./components/Gallery";
 import Contact from "./components/Contact";
-import FAQs from "./components/FAQs";
+import FAQs from "./components/Faqs";
 import Footer from "./components/Footer";
-import CTABand from "./components/CTABand";
+import CTABand from "./components/CtaBand";
 import QuickApply from "./components/QuickApply";
 
 export default function App() {
