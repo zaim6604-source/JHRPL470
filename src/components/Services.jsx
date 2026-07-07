@@ -1,90 +1,116 @@
-import { useEffect, useRef } from 'react';
-import { site } from '../data/beaconData';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+
+const services = [
+  {
+    title: 'Overseas Job Placement',
+    desc: 'We match skilled workers with verified employers in Gulf and European countries across multiple industries.',
+    icon: 'fa-briefcase',
+    bg: 'bg-misrial-primary',
+  },
+  {
+    title: 'Visa Processing',
+    desc: 'Complete visa application support — from document preparation to embassy submission and follow-up.',
+    icon: 'fa-passport',
+    bg: 'bg-misrial-accent',
+  },
+  {
+    title: 'Document Attestation',
+    desc: 'Educational certificate attestation, legalization, and translation services for overseas employment.',
+    icon: 'fa-file-signature',
+    bg: 'bg-[#FF8C42]',
+  },
+  {
+    title: 'Medical & Trade Test',
+    desc: 'Coordination of medical examinations and trade skill tests required by overseas employers.',
+    icon: 'fa-stethoscope',
+    bg: 'bg-misrial-cta',
+  },
+  {
+    title: 'Pre-Departure Orientation',
+    desc: 'Cultural awareness, language basics, and practical guidance for a smooth transition abroad.',
+    icon: 'fa-graduation-cap',
+    bg: 'bg-misrial-highlight',
+  },
+  {
+    title: 'Air Ticketing & Travel',
+    desc: 'Flight bookings, travel insurance, and airport assistance for departing workers.',
+    icon: 'fa-ticket-alt',
+    bg: 'bg-misrial-primary',
+  },
+  {
+    title: 'Employer Verification',
+    desc: 'We vet every employer to ensure legitimate contracts, fair wages, and safe working conditions.',
+    icon: 'fa-shield-halved',
+    bg: 'bg-misrial-accent',
+  },
+  {
+    title: 'Manpower Supply',
+    desc: 'Bulk skilled and unskilled manpower supply for large-scale projects across industries.',
+    icon: 'fa-users-gear',
+    bg: 'bg-[#FF8C42]',
+  },
+];
 
 export default function Services() {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (e) => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('show'); }),
-      { threshold: 0.1 }
-    );
-    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
+  const [ref, isVisible] = useScrollAnimation();
 
   return (
-    <>
-      <style>{`
-        .sv-section { background:var(--alt-section, #F0F8FF); padding:96px 24px; }
-        .sv-inner { max-width:1200px; margin:0 auto; }
-        .sv-title { font-weight:900; font-size:clamp(30px,4vw,46px); color:var(--ink, #062A45); margin-bottom:16px;font-family:'Poppins',sans-serif; }
-        .sv-honeycomb { display:flex;flex-wrap:wrap;justify-content:center;gap:20px; }
-        .sv-hex { width:270px;min-height:250px;padding:32px 24px;border-radius:20px;position:relative;cursor:pointer;transition:all .35s ease;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden; }
-        .sv-hex:hover { transform:translateY(-8px) scale(1.02);box-shadow:0 20px 48px rgba(0,0,0,.12); }
-        .sv-hex-icon { width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;flex-shrink:0; }
-        .sv-hex-title { font-weight:800;font-size:15px;margin-bottom:10px;font-family:'Poppins',sans-serif;line-height:1.3; }
-        .sv-hex-desc { font-size:13px;line-height:1.7;opacity:0;max-height:0;transition:all .35s ease; }
-        .sv-hex:hover .sv-hex-desc { opacity:1;max-height:120px; }
-        .sv-hex:hover .sv-hex-icon { transform:scale(1.1); }
-        @media(max-width:640px){ .sv-hex{width:100%;max-width:340px;min-height:auto;padding:24px 20px;} }
-      `}</style>
+    <section id="services" className="relative overflow-hidden bg-misrial-background pb-16 md:pb-20">
+      {/* Wave SVG Top */}
+      <div className="wave-divider">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-16 md:h-24">
+          <path
+            d="M0,50 C360,100 1080,0 1440,50 L1440,0 L0,0 Z"
+            fill="#FFF2EA"
+          />
+        </svg>
+      </div>
 
-      <section id="services" className="sv-section" ref={ref}>
-        <div className="sv-inner">
-
-          {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 60 }} className="reveal">
-            <div className="section-pill" style={{margin:'0 auto 18px'}}>
-              <span className="pill-dot" />
-              OUR SERVICES
-            </div>
-            <h2 className="sv-title">
-              Comprehensive{' '}
-              <span style={{color:'var(--color-primary, #0496FF)'}}>HR & Recruitment</span>
-            </h2>
-            <p style={{ color: 'var(--ink-light, #4A5E7A)', fontSize: 16, maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
-              From job placement to travel support — we cover every aspect of overseas employment with care and professionalism.
-            </p>
-          </div>
-
-          {/* Honeycomb grid */}
-          <div className="sv-honeycomb">
-            {site.services.map((s, i) => (
-              <div
-                key={i}
-                className="sv-hex reveal"
-                style={{ transitionDelay: `${(i % 4) * 0.08}s`, background: `${s.color}12`, border: `1.5px solid ${s.color}30` }}
-              >
-                <div className="sv-hex-icon" style={{ background: `${s.color}20`, color: s.color }}>
-                  <i className={s.icon}></i>
-                </div>
-                <div className="sv-hex-title" style={{ color: 'var(--ink, #062A45)' }}>{s.title}</div>
-                <div className="sv-hex-desc" style={{ color: 'var(--ink-light, #4A5E7A)' }}>{s.desc}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* CTA */}
-          <div style={{ textAlign: 'center', marginTop: 56 }} className="reveal">
-            <a href={site.whatsappLink} target="_blank" rel="noopener noreferrer" style={{
-              display:'inline-flex',alignItems:'center',gap:10,
-              background:'var(--color-cta, #FB5607)',color:'#fff',
-              fontWeight:800,fontSize:15,padding:'14px 32px',
-              borderRadius:999,border:'none',cursor:'pointer',
-              textDecoration:'none',fontFamily:'Inter,sans-serif',
-              boxShadow:'0 4px 20px rgba(251,86,7,.35)',
-              transition:'transform .25s,box-shadow .25s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(251,86,7,.5)'; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
-            >
-              <i className="fa-brands fa-whatsapp"></i> Apply for Overseas Employment
-            </a>
-          </div>
-
+      <div className="container-pad">
+        <div className="text-center mb-12">
+          <span className="inline-flex items-center gap-1.5 bg-misrial-primary/15 text-misrial-primary font-semibold text-xs px-4 py-1.5 rounded-full mb-4 tracking-wider uppercase">
+            <i className="fas fa-concierge-bell" />
+            Our Services
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#2B1400] font-heading">
+            Complete Recruitment Services
+          </h2>
+          <p className="text-gray-500 text-lg mt-3 max-w-2xl mx-auto">
+            End-to-end overseas employment solutions under one roof.
+          </p>
         </div>
-      </section>
-    </>
+
+        <div
+          ref={ref}
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
+        >
+          {services.map((s, i) => (
+            <div
+              key={i}
+              className={`group rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+              style={{ transitionDelay: `${i * 60}ms` }}
+            >
+              {/* Curved top */}
+              <div className={`${s.bg} text-white pt-8 pb-6 px-6 relative`}>
+                <svg viewBox="0 0 200 60" className="absolute -top-1 left-0 w-full h-8" preserveAspectRatio="none">
+                  <path d="M0,30 C50,60 150,0 200,30 L200,0 L0,0 Z" fill="rgba(255,255,255,0.08)" />
+                </svg>
+                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <i className={`fas ${s.icon} text-xl`} />
+                </div>
+                <h3 className="font-bold text-lg font-heading mb-2">{s.title}</h3>
+                <p className="text-sm leading-relaxed text-white/80">
+                  {s.desc}
+                </p>
+              </div>
+              {/* Bottom white bar */}
+              <div className="h-1 bg-white" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

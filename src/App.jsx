@@ -1,45 +1,37 @@
 import Navbar from './components/Navbar';
-import Marquee from './components/Marquee';
+import MarqueeTicker from './components/MarqueeTicker';
 import Hero from './components/Hero';
-import Stats from './components/Stats';
-import Process from './components/Process';
+import Destinations from './components/Destinations';
 import About from './components/About';
 import Services from './components/Services';
-import Countries from './components/Countries';
+import Process from './components/Process';
 import Testimonials from './components/Testimonials';
-import CTABand from './components/CTABand';
+import Gallery from './components/Gallery';
+import CTA from './components/CTA';
 import Contact from './components/Contact';
+import FAQ from './components/FAQ';
 import Footer from './components/Footer';
+import QuickApply from './components/QuickApply';
 
-function App() {
+export default function App() {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <Navbar />
+      <MarqueeTicker />
       <main>
-        {/* 1. Hero */}
         <Hero />
-        {/* 2. Marquee */}
-        <Marquee />
-        {/* 3. Stat Band */}
-        <Stats />
-        {/* 4. How It Works */}
-        <Process />
-        {/* 5. About */}
+        <Destinations />
         <About />
-        {/* 6. Services */}
         <Services />
-        {/* 7. Countries */}
-        <Countries />
-        {/* 8. Testimonials + Gallery */}
+        <Process />
         <Testimonials />
-        {/* 9. CTA Band */}
-        <CTABand />
-        {/* 10. Contact + Map + FAQs */}
+        <Gallery />
+        <CTA />
         <Contact />
+        <FAQ />
       </main>
       <Footer />
-    </>
+      <QuickApply />
+    </div>
   );
 }
-
-export default App;

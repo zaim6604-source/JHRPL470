@@ -1,120 +1,107 @@
 import { useState, useEffect } from 'react';
 
-const links = [
-  { label: 'Home',        id: 'home'         },
-  { label: 'About',       id: 'about'        },
-  { label: 'Services',    id: 'services'     },
-  { label: 'Destinations',id: 'countries'    },
-  { label: 'Testimonials',id: 'testimonials' },
-  { label: 'Contact',     id: 'contact'      },
-];
-
 export default function Navbar() {
-  const [solid, setSolid] = useState(false);
-  const [open,  setOpen]  = useState(false);
-  const [active, setActive] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const fn = () => {
-      setSolid(window.scrollY > 50);
-      const ids = ['home','about','services','countries','testimonials','contact'];
-      for (let i = ids.length - 1; i >= 0; i--) {
-        const el = document.getElementById(ids[i]);
-        if (el && window.scrollY >= el.offsetTop - 180) { setActive(ids[i]); break; }
-      }
-    };
-    window.addEventListener('scroll', fn, { passive: true });
-    return () => window.removeEventListener('scroll', fn);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const go = (id) => { setOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); };
+  const links = [
+    { label: 'Home', href: '#hero' },
+    { label: 'Destinations', href: '#destinations' },
+    { label: 'Services', href: '#services' },
+    { label: 'Process', href: '#process' },
+    { label: 'Contact', href: '#contact' },
+  ];
 
   return (
-    <>
-      <style>{`
-        .nb-wrap { position:fixed;top:0;left:0;right:0;z-index:9999;transition:background .35s,box-shadow .35s,backdrop-filter .35s,height .3s;padding:0 24px; }
-        .nb-wrap.solid { background:rgba(255,255,255,.95);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1px 0 rgba(4,150,255,.12),0 4px 24px rgba(4,150,255,.08); }
-        .nb-inner { max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between; }
-        .nb-logo { display:flex;align-items:center;gap:11px;background:none;border:none;cursor:pointer; }
-        .nb-logo-icon { width:42px;height:42px;border-radius:12px;background:var(--color-primary, #0496FF);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(4,150,255,.4);flex-shrink:0;color:#fff;font-size:18px; }
-        .nb-logo-name { font-weight:800;font-size:17px;line-height:1.1;color:var(--ink, #062A45);font-family:'Poppins',sans-serif; }
-        .nb-logo-sub { font-size:10px;font-weight:600;letter-spacing:.07em;margin-top:2px;color:var(--color-primary, #0496FF); }
-        .nb-links { display:flex;align-items:center;gap:2px; }
-        .nb-pill { background:none;border:none;cursor:pointer;font-weight:600;font-size:13px;padding:7px 14px;border-radius:999px;transition:all .25s;font-family:'Inter',sans-serif;white-space:nowrap; }
-        .nb-pill.on { background:var(--color-primary, #0496FF);color:#fff !important;box-shadow:0 2px 10px rgba(4,150,255,.3); }
-        .nb-cta { display:inline-flex;align-items:center;gap:8px;background:var(--color-cta, #FB5607);color:#fff;font-weight:800;font-size:13px;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(251,86,7,.35);transition:transform .25s,box-shadow .25s;margin-left:8px;font-family:'Inter',sans-serif; }
-        .nb-cta:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(251,86,7,.5); }
-        .hbg { background:none;border:none;cursor:pointer;padding:8px;display:none; }
-        .hbg-bar { display:block;height:2px;border-radius:2px;transition:all .25s; }
-        .mob-menu { background:#fff;overflow:hidden;transition:max-height .35s ease,box-shadow .35s;border-bottom:1px solid rgba(4,150,255,.15); }
-        @media(max-width:900px){
-          .nb-links{display:none!important}
-          .hbg{display:block!important}
-        }
-      `}</style>
-
-      <nav className={`nb-wrap${solid ? ' solid' : ''}`} style={{ height: solid ? 64 : 80 }}>
-        <div className="nb-inner" style={{ height: '100%' }}>
-          {/* Logo */}
-          <button className="nb-logo" onClick={() => go('home')}>
-            <div className="nb-logo-icon">
-              <i className="fa-solid fa-lightbulb"></i>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md shadow-md`}
+    >
+      <div className="container-pad">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          <a href="#hero" className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-lg bg-misrial-primary flex items-center justify-center">
+              <i className="fas fa-briefcase text-white text-sm" />
             </div>
-            <div style={{textAlign:'left'}}>
-              <div className="nb-logo-name">Beacon Bright</div>
-              <div className="nb-logo-sub">Govt. Licensed OEP</div>
+            <div className="flex flex-col leading-tight">
+              <span className={`font-heading font-bold text-sm md:text-base text-[#2B1400]`}>
+                Misrial Enterprises
+              </span>
+              <span className={`text-[10px] md:text-xs font-medium tracking-wider text-misrial-primary`}>
+                MANPOWER RECRUITMENT
+              </span>
             </div>
-          </button>
+          </a>
 
-          {/* Desktop nav */}
-          <div className="nb-links">
-            {links.map(l => (
-              <button
-                key={l.id}
-                onClick={() => go(l.id)}
-                className={`nb-pill ${active===l.id?'on':''}`}
-                style={{
-                  color: active===l.id ? '#fff' : (solid ? 'var(--ink-light, #4A5E7A)' : 'rgba(255,255,255,.85)'),
-                  background: active===l.id ? '' : (solid && active===l.id ? 'var(--color-primary)' : 'transparent'),
-                }}
+          <div className="hidden md:flex items-center gap-6">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors duration-200 hover:text-misrial-cta text-[#2B1400]`}
               >
-                {l.label}
-              </button>
+                {link.label}
+              </a>
             ))}
-            <a href="https://wa.me/923339862425" target="_blank" rel="noopener noreferrer" className="nb-cta">
-              <i className="fa-brands fa-whatsapp"></i> Apply
+            <span className="inline-flex items-center gap-1.5 bg-misrial-cta/15 text-misrial-cta px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-misrial-cta/30">
+              <i className="fas fa-certificate" />
+              2203/RWP
+            </span>
+            <a
+              href="https://wa.me/923215667136"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-misrial-cta hover:bg-misrial-cta/90 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 inline-flex items-center gap-2"
+            >
+              <i className="fas fa-paper-plane" />
+              Apply Now
             </a>
           </div>
 
-          {/* Hamburger */}
-          <button className="hbg" onClick={() => setOpen(!open)} aria-label="Menu">
-            <span className="hbg-bar" style={{width:24,background:solid?'#062A45':'#fff',transform:open?'rotate(45deg) translate(5px,5px)':'none'}}/>
-            <span className="hbg-bar" style={{width:open?0:18,background:'#0496FF',margin:'5px 0',opacity:open?0:1}}/>
-            <span className="hbg-bar" style={{width:24,background:solid?'#062A45':'#fff',transform:open?'rotate(-45deg) translate(5px,-5px)':'none'}}/>
+          <button
+            className={`md:hidden text-xl text-[#2B1400]`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`} />
           </button>
         </div>
+      </div>
 
-        {/* Mobile dropdown */}
-        <div className="mob-menu" style={{maxHeight:open?500:0,boxShadow:open?'0 8px 30px rgba(0,0,0,.08)':'none',borderTop:open?'1px solid rgba(4,150,255,.15)':'none'}}>
-          <div style={{padding:'12px 20px 20px',display:'flex',flexDirection:'column',gap:4}}>
-            {links.map(l => (
-              <button key={l.id} onClick={() => go(l.id)} style={{
-                background:active===l.id?'rgba(4,150,255,.1)':'none',border:'none',cursor:'pointer',
-                textAlign:'left',padding:'12px 16px',borderRadius:10,
-                fontWeight:600,fontSize:15,
-                color:active===l.id?'#0496FF':'#4A5E7A',transition:'background .2s',
-              }}>{l.label}</button>
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+          <div className="container-pad py-4 space-y-3">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="block text-sm font-medium text-[#2B1400] hover:text-misrial-primary transition-colors"
+              >
+                {link.label}
+              </a>
             ))}
-            <a href="https://wa.me/923339862425" target="_blank" rel="noopener noreferrer" style={{
-              display:'flex',alignItems:'center',gap:8,justifyContent:'center',marginTop:8,
-              background:'#FB5607',color:'#fff',fontWeight:800,fontSize:15,padding:'12px 22px',
-              borderRadius:999,border:'none',cursor:'pointer',textDecoration:'none',
-            }}>
-              <i className="fa-brands fa-whatsapp"></i> Apply on WhatsApp
+            <span className="inline-flex items-center gap-1.5 bg-misrial-cta/15 text-misrial-cta px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-misrial-cta/30">
+              <i className="fas fa-certificate" />
+              2203/RWP
+            </span>
+            <a
+              href="https://wa.me/923215667136"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-center bg-misrial-cta hover:bg-misrial-cta/90 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-all"
+            >
+              <i className="fas fa-paper-plane mr-2" />
+              Apply Now
             </a>
           </div>
         </div>
-      </nav>
-    </>
+      )}
+    </nav>
   );
 }

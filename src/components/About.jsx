@@ -1,116 +1,112 @@
-import { useEffect, useRef } from 'react';
-import { site } from '../data/beaconData';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+
+const stats = [
+  { value: '3500+', label: 'Workers Placed', icon: 'fa-users' },
+  { value: '12+', label: 'Countries', icon: 'fa-globe-asia' },
+  { value: '15+', label: 'Years Experience', icon: 'fa-calendar-alt' },
+  { value: 'Licensed', label: 'Govt. Approved', icon: 'fa-certificate' },
+];
+
+const trustChips = [
+  'Govt. Licensed OEP 2203/RWP',
+  'Verified Gulf Employers',
+  'European Union Partners',
+  'Transparent Fee Structure',
+  'End-to-End Support',
+  'Pre-Departure Training',
+];
 
 export default function About() {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); }),
-      { threshold: 0.12 }
-    );
-    ref.current?.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
+  const [sectionRef, isVisible] = useScrollAnimation();
+  const [cardRef, cardVisible] = useScrollAnimation();
 
   return (
-    <>
-      <style>{`
-        .ab-section { background:#fff; padding:96px 24px; }
-        .ab-inner { max-width:1200px; margin:0 auto; }
-        .ab-header { text-align:center; margin-bottom:64px; }
-        .ab-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
-        @media(max-width:900px){ .ab-grid{grid-template-columns:1fr; gap:48px} }
-        .ab-img-wrap { position:relative; }
-        .ab-img { width:100%; height:460px; object-fit:cover; border-radius:24px; display:block; border:1px solid var(--card-border, #D0E4F5); box-shadow:0 4px 20px rgba(0,0,0,.04); }
-        .ab-img-badge { position:absolute; background:#fff; border:1px solid rgba(4,150,255,.2); border-radius:16px; padding:14px 20px; box-shadow:0 8px 32px rgba(0,0,0,.06); }
-        .ab-badge-n { font-weight:900; font-size:26px; color:var(--color-primary, #0496FF); line-height:1; }
-        .ab-badge-l { font-size:12px; color:var(--ink-light, #4A5E7A); font-weight:600; margin-top:3px; }
-        .ab-title { font-weight:900; font-size:clamp(26px,3.2vw,38px); color:var(--ink, #062A45); margin-bottom:16px;font-family:'Poppins',sans-serif; }
-        .ab-body  { font-size:15px; line-height:1.8; color:var(--ink-light, #4A5E7A); margin-bottom:14px; }
-        .ab-addr-row { display:flex; align-items:flex-start; gap:12px; padding:14px 18px; background:var(--color-background, #E8F5FF); border:1px solid rgba(4,150,255,.15); border-radius:14px; margin-bottom:12px; }
-        .ab-addr-icon { width:38px; height:38px; border-radius:10px; background:rgba(4,150,255,.1); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-        .ab-addr-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--color-primary, #0496FF); margin-bottom:3px; }
-        .ab-addr-value { font-size:14px; font-weight:600; color:var(--ink, #062A45); line-height:1.5; }
-        .ab-chips { display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
-        .ab-chip { display:inline-flex; align-items:center; gap:8px; background:rgba(4,150,255,.08); border:1px solid rgba(4,150,255,.2); border-radius:999px; padding:8px 16px; font-size:13px; font-weight:600; color:var(--color-primary, #0496FF); }
-      `}</style>
+    <section id="about" className="relative overflow-hidden">
+      {/* Wide Banner */}
+      <div className="bg-misrial-primary py-20 md:py-28">
+        <div className="container-pad text-center">
+          <span className="inline-flex items-center gap-1.5 bg-white/15 text-white font-semibold text-xs px-4 py-1.5 rounded-full mb-4 tracking-wider uppercase">
+            <i className="fas fa-building" />
+            Who We Are
+          </span>
+          <h2 className="text-3xl md:text-5xl font-bold text-white font-heading max-w-3xl mx-auto">
+            Rawalpindi's Trusted Overseas Recruitment Agency
+          </h2>
+          <p className="text-white/80 text-lg mt-4 max-w-2xl mx-auto">
+            Registered with the Government of Pakistan, we connect skilled workers
+            with verified employers across the Gulf, Europe, and Asia.
+          </p>
+        </div>
+      </div>
 
-      <section id="about" className="ab-section" ref={ref}>
-        <div className="ab-inner">
-
-          {/* Header */}
-          <div className="ab-header reveal">
-            <div className="section-pill" style={{margin:'0 auto 18px'}}>
-              <span className="pill-dot" />
-              WHO WE ARE
-            </div>
-            <h2 style={{ fontWeight: 900, fontSize: 'clamp(30px,4vw,46px)', color: 'var(--ink, #062A45)', marginBottom: 16, fontFamily: "'Poppins', sans-serif" }}>
-              About{' '}
-              <span style={{color: 'var(--color-primary, #0496FF)'}}>Beacon Bright</span>
-            </h2>
-            <p style={{ color: 'var(--ink-light, #4A5E7A)', fontSize: 16, maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
-              {site.about.title}
-            </p>
-          </div>
-
-          {/* Two column */}
-          <div className="ab-grid">
-            {/* Image */}
-            <div className="ab-img-wrap reveal-l">
-              <img
-                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=90&auto=format&fit=crop"
-                alt="Beacon Bright office"
-                className="ab-img"
-              />
-              <div className="ab-img-badge float" style={{ top: -20, right: -20 }}>
-                <div className="ab-badge-n">9+</div>
-                <div className="ab-badge-l">Countries</div>
+      {/* Overlapping Card */}
+      <div className="relative -mt-16 z-10" ref={cardRef}>
+        <div className="container-pad">
+          <div className={`bg-white rounded-3xl shadow-xl p-8 md:p-12 max-w-5xl mx-auto transition-all duration-700 ${
+            cardVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <img
+                  src="/src/assets/images/about-factory.jpg"
+                  alt="Misrial Enterprises office"
+                  className="rounded-2xl w-full h-64 md:h-80 object-cover shadow-lg"
+                  onError={(e) => { e.target.src = '/src/assets/images/gold-street/fallback.jpg'; }}
+                  loading="lazy"
+                />
               </div>
-              <div className="ab-img-badge float" style={{ bottom: -20, left: -20, animationDelay: '2s' }}>
-                <div className="ab-badge-n">2K+</div>
-                <div className="ab-badge-l">Placements</div>
-              </div>
-            </div>
+              <div>
+                <h3 className="text-2xl font-bold text-[#2B1400] font-heading mb-4">
+                  Licensed. Honest. Complete.
+                </h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  Based at Office No. 5-D/384, Lane No. 7, Chaurharpal, Misrial Road,
+                  Rawalpindi, we have been placing local talent with reliable overseas
+                  employers for over 15 years. Our team handles everything — from
+                  documentation to departure.
+                </p>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  We work only with verified employers and ensure every worker receives
+                  fair contracts, proper visas, and complete pre-departure support.
+                </p>
 
-            {/* Text */}
-            <div className="reveal-r">
-              <div className="section-pill" style={{ marginBottom: 18, borderColor: 'rgba(4,150,255,.25)', color: 'var(--color-primary, #0496FF)' }}>
-                <span className="pill-dot" />
-                Bypass Road, Baghdada — Mardan
-              </div>
-              <h3 className="ab-title">
-                Trusted Partner for<br />
-                <span style={{ color: 'var(--color-primary, #0496FF)' }}>Overseas Employment & HR</span>
-              </h3>
-              <p className="ab-body">{site.about.para1}</p>
-              <p className="ab-body">{site.about.para2}</p>
-
-              {/* Chips */}
-              <div className="ab-chips">
-                {site.about.chips.map((c, i) => (
-                  <span key={i} className="ab-chip">
-                    <i className={c.icon}></i> {c.label}
-                  </span>
-                ))}
-              </div>
-
-              {/* Address detail */}
-              <div style={{ marginTop: 28 }}>
-                <div className="ab-addr-row">
-                  <div className="ab-addr-icon">
-                    <i className="fa-solid fa-location-dot" style={{color:'var(--color-primary, #0496FF)',fontSize:16}}></i>
-                  </div>
-                  <div>
-                    <div className="ab-addr-label">Office Address</div>
-                    <div className="ab-addr-value">{site.address}</div>
-                  </div>
+                {/* Trust Chips */}
+                <div className="flex flex-wrap gap-2">
+                  {trustChips.map((chip, i) => (
+                    <span key={i} className="inline-flex items-center gap-1 bg-misrial-background text-misrial-primary text-xs font-medium px-3 py-1.5 rounded-full">
+                      <i className="fas fa-check-circle text-misrial-cta" />
+                      {chip}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* Stats Band */}
+      <div className="bg-misrial-secondary py-14 md:py-18 mt-10" ref={sectionRef}>
+        <div className="container-pad">
+          <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 transition-all duration-700 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}>
+            {stats.map((stat, i) => (
+              <div key={i} className="text-center group" style={{ transitionDelay: `${i * 100}ms` }}>
+                <div className="w-14 h-14 md:w-16 md:h-16 bg-white/40 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-white/60 transition-all duration-300">
+                  <i className={`fas ${stat.icon} text-2xl md:text-3xl text-[#2B1400]`} />
+                </div>
+                <div className="text-3xl md:text-4xl font-extrabold text-[#2B1400] font-heading mb-1">
+                  {stat.value}
+                </div>
+                <div className="text-sm md:text-base text-[#2B1400]/70 font-medium">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
