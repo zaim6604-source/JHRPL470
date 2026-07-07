@@ -1,113 +1,98 @@
-import { useState } from "react";
+import { useEffect, useRef } from 'react';
 
-function ImgWithFallback({ src, alt, className }) {
-  const [failed, setFailed] = useState(false);
-  if (failed) {
-    return (
-      <div className={`${className} bg-gradient-to-br from-secondary via-primary to-highlight flex items-center justify-center`}>
-        <div className="text-center">
-          <i className="fas fa-users text-white/40 text-5xl mb-2"></i>
-          <p className="text-white/50 text-xs">Team Photo</p>
-        </div>
-      </div>
-    );
-  }
-  return <img src={src} alt={alt} className={className} onError={() => setFailed(true)} />;
-}
+const statChips = [
+  { n: '500+', l: 'Workers Placed' },
+  { n: '15+', l: 'Countries' },
+  { n: '10+', l: 'Years Experience' },
+  { n: '2199', l: 'License / DGK' },
+];
 
 export default function Hero() {
+  const h1Ref = useRef(null);
+  const subRef = useRef(null);
+  const ctaRef = useRef(null);
+
+  useEffect(() => {
+    const els = [h1Ref, subRef, ctaRef];
+    els.forEach((ref, i) => {
+      if (ref.current) {
+        ref.current.style.opacity = 0;
+        ref.current.style.transform = 'translateY(28px)';
+        setTimeout(() => {
+          if (ref.current) {
+            ref.current.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+            ref.current.style.opacity = 1;
+            ref.current.style.transform = 'translateY(0)';
+          }
+        }, 200 + i * 150);
+      }
+    });
+  }, []);
+
   return (
-    <section className="flex flex-col md:flex-row min-h-[85vh]">
-      {/* Left panel: ocean-blue solid */}
-      <div className="w-full md:w-1/2 bg-primary text-white flex flex-col justify-center px-6 sm:px-10 lg:px-16 xl:px-20 py-16">
-        <div className="max-w-xl">
-          {/* Pill badge */}
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-accent border border-white/20 mb-6">
-            <i className="fas fa-badge-check mr-1.5"></i>
-            Licensed Recruiter — 2193/RWP
-          </span>
+    <section id="home" style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/images/hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(0,107,166,0.75) 0%, rgba(4,150,255,0.55) 50%, rgba(0,85,128,0.7) 100%)', zIndex: 1 }} />
 
-          {/* Headline */}
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-5">
-            We Open the Door —{" "}
-            <span className="text-accent">You Walk Into a Better Living</span>
-          </h2>
+      <div style={{ position: 'relative', zIndex: 4, width: '100%', maxWidth: 1100, margin: '0 auto', padding: '80px 24px 0' }}>
+        {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid rgba(255,188,66,0.4)', paddingBottom: 12, marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <i className="fas fa-globe-asia" style={{ color: '#FFBC42', fontSize: 16 }} />
+            </div>
+            <div>
+              <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', letterSpacing: '-0.3px' }}>Qadir International</div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: '#FFBC42', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600 }}>License 2199/DGK · Overseas Employment</div>
+            </div>
+          </div>
+          <div style={{ border: '2px solid rgba(255,188,66,0.5)', borderRadius: 8, padding: '4px 12px', transform: 'rotate(3deg)' }}>
+            <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 13, color: '#FFBC42', letterSpacing: '0.05em' }}>2199/DGK</span>
+          </div>
+        </div> */}
 
-          {/* Subhead */}
-          <p className="text-base sm:text-lg text-white/80 mb-8 leading-relaxed max-w-lg">
-            Jabballian Overseas Recruiting Agency guides Rawalpindi's workers into
-            trusted Gulf and European jobs — licensed and thorough.
+        <div ref={h1Ref} style={{ maxWidth: 760 }}>
+          <h1 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 'clamp(36px, 7vw, 68px)', color: '#fff', lineHeight: 1.08, letterSpacing: '-1.5px', marginBottom: 20 }}>
+            Dependable Recruitment,<br /><span style={{ color: '#FFBC42' }}>Powered by Real Results</span>
+          </h1>
+          <p ref={subRef} style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(15px, 2vw, 18px)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, maxWidth: 600, marginBottom: 32 }}>
+            Qadir International moves Dera Ghazi Khan's workers into secure Gulf and European jobs — licensed and thorough.
           </p>
 
-          {/* Buttons */}
-          <div className="flex flex-wrap gap-4">
-            <a
-              href="https://wa.me/923339941576"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-cta text-white px-7 py-3.5 rounded-lg text-base font-bold hover:bg-cta/90 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
-            >
-              <i className="fas fa-paper-plane"></i>
-              Apply Now
+          <div ref={ctaRef} style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 40 }}>
+            <a href="https://wa.me/923334857777?text=Hello%20Qadir%20International%2C%20I%20want%20to%20apply%20for%20a%20job." target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 28px', borderRadius: 12, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer', textDecoration: 'none', background: '#D81159', boxShadow: '0 4px 20px rgba(216,17,89,0.4)', transition: 'transform 0.25s, box-shadow 0.25s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(216,17,89,0.6)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(216,17,89,0.4)'; }}>
+              <i className="fas fa-paper-plane" /> Apply Now
             </a>
-            <a
-              href="https://wa.me/923339941576"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-transparent border-2 border-white/40 text-white px-7 py-3.5 rounded-lg text-base font-semibold hover:bg-white/10 transition-all inline-flex items-center gap-2"
-            >
-              <i className="fab fa-whatsapp"></i>
-              WhatsApp Us
+            <a href="https://wa.me/923334857777" target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 12, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, color: '#fff', cursor: 'pointer', textDecoration: 'none', background: 'transparent', border: '2px solid rgba(255,255,255,0.35)', transition: 'background 0.25s, border-color 0.25s, transform 0.25s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.7)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+              <i className="fab fa-whatsapp" /> WhatsApp
             </a>
           </div>
 
-          {/* Floating trust indicators */}
-          <div className="flex flex-wrap gap-6 mt-10 pt-8 border-t border-white/15">
-            <div className="flex items-center gap-2">
-              <i className="fas fa-users text-accent"></i>
-              <span className="text-sm text-white/70">4000+ Placed</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <i className="fas fa-globe text-accent"></i>
-              <span className="text-sm text-white/70">12+ Countries</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <i className="fas fa-shield-halved text-accent"></i>
-              <span className="text-sm text-white/70">Govt. Licensed</span>
-            </div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,188,66,0.15)', border: '1px solid rgba(255,188,66,0.25)', borderRadius: 99, padding: '4px 14px', marginBottom: 32 }}>
+            <i className="fas fa-certificate" style={{ color: '#FFBC42', fontSize: 11 }} />
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, color: '#FFBC42', letterSpacing: '0.05em' }}>Government Licensed — 2199/DGK</span>
           </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(16px, 3vw, 36px)', flexWrap: 'wrap', padding: '18px 28px', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 16 }}>
+          {statChips.map((s) => (
+            <div key={s.l} style={{ textAlign: 'center' }}>
+              <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 'clamp(20px, 3vw, 28px)', color: '#fff', lineHeight: 1 }}>{s.n}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', fontFamily: 'Inter, sans-serif', marginTop: 4, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{s.l}</div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Right panel: full-height photo */}
-      <div className="w-full md:w-1/2 relative min-h-[40vh] md:min-h-[85vh] overflow-hidden">
-        <ImgWithFallback
-          src="https://images.unsplash.com/photo-1573164574511-73c773193279?w=800&q=80"
-          alt="Professional team at Jabballian Overseas"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-
-        {/* Wavy inner seam overlay */}
-        <div className="absolute inset-0 md:bg-gradient-to-r md:from-primary/30 md:to-transparent"></div>
-
-        {/* 2193/RWP badge */}
-        <div className="absolute top-6 right-6 bg-white/95 text-primary font-heading font-bold px-4 py-2 rounded-lg shadow-lg text-sm">
-          <i className="fas fa-certificate text-accent mr-1.5"></i>
-          2193/RWP
-        </div>
-
-        {/* Floating stat chips */}
-        <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3">
-          <div className="bg-white/90 backdrop-blur-sm text-ink px-4 py-2.5 rounded-lg shadow-lg text-sm font-semibold flex items-center gap-2">
-            <i className="fas fa-briefcase text-primary"></i>
-            Gulf & Europe Jobs
-          </div>
-          <div className="bg-white/90 backdrop-blur-sm text-ink px-4 py-2.5 rounded-lg shadow-lg text-sm font-semibold flex items-center gap-2">
-            <i className="fas fa-building text-primary"></i>
-            United Centre, Shamsabad
-          </div>
-        </div>
-      </div>
+      <button onClick={() => { const el = document.getElementById('about'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+        style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 5, background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: 16, animation: 'floatY 2s ease-in-out infinite' }}>
+        <i className="fas fa-chevron-down" />
+      </button>
     </section>
   );
 }

@@ -1,124 +1,91 @@
+import { useEffect } from 'react';
+
 const steps = [
-  {
-    num: "01",
-    title: "Register & Consult",
-    desc: "Visit our office at United Centre, Shamsabad or contact us via WhatsApp. Discuss your skills, preferences, and target destinations with our consultants.",
-    icon: "fa-clipboard-list",
-  },
-  {
-    num: "02",
-    title: "Documents & Visa",
-    desc: "Submit your documents for verification. We handle passport, educational certificates, experience letters, and visa application processing.",
-    icon: "fa-file-lines",
-  },
-  {
-    num: "03",
-    title: "Medical & Trade Test",
-    desc: "Undergo mandatory medical examinations and any required trade skill assessments as per destination country requirements.",
-    icon: "fa-stethoscope",
-  },
-  {
-    num: "04",
-    title: "Employer Confirmation",
-    desc: "We coordinate with the overseas employer for final confirmation, contract signing, and all necessary approvals.",
-    icon: "fa-handshake",
-  },
-  {
-    num: "05",
-    title: "Ticketing & Departure",
-    desc: "We arrange your air ticket, provide pre-departure orientation, and ensure you're fully prepared for your journey abroad.",
-    icon: "fa-plane-departure",
-  },
+  { num: 1, title: 'Free Consultation', desc: 'Contact us via phone, WhatsApp, or visit our D.G. Khan office for a free career discussion.', icon: 'fa-comments' },
+  { num: 2, title: 'Documentation & Visa', desc: 'Submit your documents. We handle attestation, application, and visa processing on your behalf.', icon: 'fa-file-lines' },
+  { num: 3, title: 'Medical & Trade Test', desc: 'We coordinate medical exams and trade tests required by your destination country.', icon: 'fa-stethoscope' },
+  { num: 4, title: 'Job Confirmation', desc: 'Receive your official job offer and contract from our verified overseas employer partners.', icon: 'fa-file-signature' },
+  { num: 5, title: 'Departure & Settlement', desc: 'Flight booking, pre-departure briefing, and smooth handover at your new workplace.', icon: 'fa-plane-departure' },
 ];
 
 export default function Process() {
-  return (
-    <section id="process" className="py-20 relative overflow-hidden">
-      {/* Diagonal band background */}
-      <div className="absolute inset-0 bg-background" />
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: "linear-gradient(135deg, transparent 0%, transparent 40%, rgba(0, 107, 166, 0.08) 50%, transparent 60%, transparent 100%)",
-        }}
-      />
+  useEffect(() => {
+    const els = document.querySelectorAll('.pr-reveal');
+    const observer = new IntersectionObserver(
+      (entries) => { entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('show'); observer.unobserve(e.target); } }); },
+      { threshold: 0.15 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Pill */}
-        <div className="flex justify-center mb-14">
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-primary/10 text-primary border border-primary/20">
-            HOW IT WORKS
+  return (
+    <section id="process" className="py-[clamp(80px,10vw,120px)] px-5 relative overflow-hidden"
+      style={{ background: 'linear-gradient(160deg, #006BA6 0%, #005580 50%, #0496FF 100%)' }}>
+      <div className="max-w-5xl mx-auto relative z-10">
+        <div className="pr-reveal reveal text-center mb-16">
+          <span className="section-pill" style={{ background: 'rgba(255,255,255,0.12)', color: '#E6F3FB', borderColor: 'rgba(230,243,251,0.3)' }}>
+            <i className="fas fa-route" style={{ fontSize: 10 }} /> HOW IT WORKS
           </span>
+          <h2 className="font-display font-extrabold mt-4" style={{ fontSize: 'clamp(28px,5vw,44px)', color: '#fff', letterSpacing: '-0.8px' }}>
+            Our <span style={{ color: '#FFBC42' }}>Process</span>
+          </h2>
         </div>
 
-        {/* Vertical timeline */}
-        <div className="relative">
-          {/* Center line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-primary/20 hidden md:block"></div>
-
-          <div className="space-y-12">
-            {steps.map((step, idx) => {
-              const isLeft = idx % 2 === 0;
-              return (
-                <div key={step.num} className="relative flex items-center">
-                  {/* Mobile layout */}
-                  <div className="md:hidden flex items-start gap-4 w-full">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-heading font-bold text-sm shadow-lg">
-                      {step.num}
-                    </div>
-                    <div className="bg-white rounded-xl p-5 shadow-md border border-primary/10 flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <i className={`fas ${step.icon} text-primary`}></i>
-                        <h3 className="font-heading font-bold text-ink">{step.title}</h3>
-                      </div>
-                      <p className="text-sm text-ink/70 leading-relaxed">{step.desc}</p>
-                    </div>
-                  </div>
-
-                  {/* Desktop layout */}
-                  {isLeft ? (
-                    <>
-                      {/* Left card */}
-                      <div className="hidden md:flex w-[calc(50%-2rem)] justify-end">
-                        <div className="bg-white rounded-xl p-6 shadow-md border border-primary/10 text-right">
-                          <div className="flex items-center justify-end gap-2 mb-2">
-                            <h3 className="font-heading font-bold text-ink">{step.title}</h3>
-                            <i className={`fas ${step.icon} text-primary`}></i>
-                          </div>
-                          <p className="text-sm text-ink/70 leading-relaxed">{step.desc}</p>
-                        </div>
-                      </div>
-                      {/* Center number */}
-                      <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-primary text-white items-center justify-center font-heading font-bold text-sm shadow-lg z-10">
-                        {step.num}
-                      </div>
-                      {/* Right spacer */}
-                      <div className="hidden md:block w-[calc(50%-2rem)]"></div>
-                    </>
-                  ) : (
-                    <>
-                      {/* Left spacer */}
-                      <div className="hidden md:block w-[calc(50%-2rem)]"></div>
-                      {/* Center number */}
-                      <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-primary text-white items-center justify-center font-heading font-bold text-sm shadow-lg z-10">
-                        {step.num}
-                      </div>
-                      {/* Right card */}
-                      <div className="hidden md:flex w-[calc(50%-2rem)]">
-                        <div className="bg-white rounded-xl p-6 shadow-md border border-primary/10">
-                          <div className="flex items-center gap-2 mb-2">
-                            <i className={`fas ${step.icon} text-primary`}></i>
-                            <h3 className="font-heading font-bold text-ink">{step.title}</h3>
-                          </div>
-                          <p className="text-sm text-ink/70 leading-relaxed">{step.desc}</p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
+        {/* Progress-tracker desktop */}
+        <div className="hidden md:block" style={{ position: 'relative', padding: '0 40px' }}>
+          {/* Track line */}
+          <div style={{ position: 'absolute', top: 36, left: '8%', right: '8%', height: 4, background: 'rgba(255,255,255,0.2)', borderRadius: 4 }}>
+            <div style={{ width: '100%', height: '100%', background: 'linear-gradient(90deg, #FFBC42, #0496FF)', borderRadius: 4, position: 'relative' }} />
           </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            {steps.map((s, i) => (
+              <div key={s.num} className="pr-reveal reveal" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '18%', transitionDelay: `${i * 0.1}s` }}>
+                {/* Numbered pin */}
+                <div style={{ width: 72, height: 72, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, position: 'relative', zIndex: 2, background: 'linear-gradient(135deg, #FFBC42, #0496FF)', boxShadow: '0 8px 24px rgba(255,188,66,0.4)' }}>
+                  <i className={`fas ${s.icon}`} style={{ color: '#fff', fontSize: 22 }} />
+                </div>
+
+                {/* Card alternates above/below */}
+                <div style={{
+                  textAlign: 'center',
+                  background: 'rgba(255,255,255,0.08)',
+                  borderRadius: 16,
+                  padding: '16px 12px',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  backdropFilter: 'blur(4px)',
+                  width: '100%',
+                  marginTop: i % 2 === 0 ? 0 : 'auto',
+                  marginBottom: i % 2 === 0 ? 'auto' : 0,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 6 }}>
+                    <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 14, color: '#FFBC42' }}>Step {s.num}</span>
+                  </div>
+                  <h3 className="font-display font-bold text-sm text-white mb-2">{s.title}</h3>
+                  <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter, sans-serif' }}>{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile stacked */}
+        <div className="md:hidden flex flex-col gap-6">
+          {steps.map((s, i) => (
+            <div key={s.num} className="pr-reveal reveal flex items-start gap-4" style={{ transitionDelay: `${i * 0.1}s` }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 mt-1" style={{ background: 'linear-gradient(135deg, #FFBC42, #0496FF)', boxShadow: '0 8px 24px rgba(255,188,66,0.4)' }}>
+                <i className={`fas ${s.icon}`} style={{ color: '#fff', fontSize: 16 }} />
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 16, padding: '14px 16px', border: '1px solid rgba(255,255,255,0.1)', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 11, color: '#FFBC42' }}>STEP {s.num}</span>
+                </div>
+                <h3 className="font-display font-bold text-base text-white mb-1">{s.title}</h3>
+                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter, sans-serif' }}>{s.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

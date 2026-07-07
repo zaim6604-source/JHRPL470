@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#c8a96e"/>
+  <rect x="150" y="100" width="300" height="200" rx="8" fill="rgba(255,255,255,0.1)"/>
+  <text x="300" y="250" font-family="sans-serif" font-size="20" fill="#fff" text-anchor="middle" font-weight="bold">Kuwait</text>
+  <text x="300" y="350" font-family="sans-serif" font-size="18" fill="#fff" text-anchor="middle">Kuwait Towers</text>
+</svg>

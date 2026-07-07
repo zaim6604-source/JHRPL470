@@ -1,6 +1,10 @@
-@import "tailwindcss";
+@import '@fortawesome/fontawesome-free/css/all.min.css';
 
-@theme {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
   --color-primary: #006BA6;
   --color-secondary: #0496FF;
   --color-accent: #FFBC42;
@@ -8,155 +12,155 @@
   --color-highlight: #005580;
   --color-background: #E6F3FB;
   --color-ink: #06283D;
-  --font-heading: 'Plus Jakarta Sans', sans-serif;
-  --font-body: 'Inter', sans-serif;
 }
 
-* {
-  box-sizing: border-box;
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--color-ink);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.15;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--color-background); }
+  ::-webkit-scrollbar-thumb { background: var(--color-secondary); border-radius: 99px; }
+
+  #root { width: 100%; min-height: 100vh; }
 }
 
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  background-color: var(--color-background);
-  color: var(--color-ink);
-}
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: var(--color-cta);
+    box-shadow: 0 4px 20px rgba(216, 17, 89, 0.35);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(216, 17, 89, 0.55);
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 28px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  }
+  .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+  }
 
-#root {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  text-align: left;
-  border: none;
-}
+  .section-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 99px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(0, 107, 166, 0.08);
+    color: var(--color-primary);
+    border: 1px solid rgba(0, 107, 166, 0.2);
+  }
 
-html {
-  scroll-behavior: smooth;
-}
+  .nav-link {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-secondary);
+    border-radius: 99px;
+    transition: width 0.25s;
+  }
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
 
-/* ===== Animations ===== */
-
-@keyframes fadeInUp {
-  from {
+  .reveal {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(28px);
+    transition: opacity 0.7s, transform 0.7s;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes ticker {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes countUp {
-  from {
+  .reveal-l {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateX(-28px);
+    transition: opacity 0.7s, transform 0.7s;
   }
-  to {
+  .reveal-r {
+    opacity: 0;
+    transform: translateX(28px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.show,
+  .reveal-l.show,
+  .reveal-r.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(0);
+  }
+
+  .img-zoom {
+    transition: transform 0.5s;
+  }
+  .img-zoom:hover {
+    transform: scale(1.07);
   }
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes wavy {
-  0%, 100% { d: path("M0,40 C120,80 240,0 360,40 C480,80 600,0 720,40 L720,120 L0,120 Z"); }
-  50% { d: path("M0,60 C120,20 240,80 360,40 C480,0 600,60 720,40 L720,120 L0,120 Z"); }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.animate-fade-in-up-delay-1 {
-  animation: fadeInUp 0.6s ease-out 0.15s forwards;
-  opacity: 0;
-}
-
-.animate-fade-in-up-delay-2 {
-  animation: fadeInUp 0.6s ease-out 0.3s forwards;
-  opacity: 0;
-}
-
-.animate-fade-in-up-delay-3 {
-  animation: fadeInUp 0.6s ease-out 0.45s forwards;
-  opacity: 0;
-}
-
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Wavy divider */
-.wavy-divider {
-  position: relative;
-  height: 60px;
-  overflow: hidden;
-}
-
-.wavy-divider svg {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-}
-
-/* Testimonial quote mark */
-.quote-mark {
-  font-size: 6rem;
-  line-height: 0.8;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-/* Masonry-like gallery */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #E6F3FB;
-}
-::-webkit-scrollbar-thumb {
-  background: #006BA6;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #005580;
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(28px); }
+  100% { opacity: 1; transform: translateY(0); }
 }

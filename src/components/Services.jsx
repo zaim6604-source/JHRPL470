@@ -1,120 +1,131 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 
 const services = [
   {
-    title: "Overseas Job Placement",
-    desc: "Connecting skilled Pakistani workers with reputable employers across the Gulf and Europe. End-to-end placement support.",
-    icon: "fa-briefcase",
-    color: "bg-primary",
-    img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80",
+    id: 1, title: 'Overseas Recruitment',
+    desc: 'We source, screen, and place qualified candidates in roles across the Gulf, Europe, and Asia — matching skills to employer needs.',
+    features: ['CV screening & shortlisting', 'Employer-candidate matching', 'Pre-departure briefing', 'Post-placement follow-up'],
+    img: '/images/saudi.jpg',
+    color: '#006BA6',
   },
   {
-    title: "Visa Processing",
-    desc: "Complete visa documentation and processing for work permits, ensuring compliance with destination country requirements.",
-    icon: "fa-passport",
-    color: "bg-secondary",
-    img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80",
+    id: 2, title: 'Visa & Documentation',
+    desc: 'Our team guides applicants through every visa category — work permits, employment visas, and attestation — minimising delays.',
+    features: ['Document checklist & guidance', 'Work permit applications', 'Degree attestation support', 'Embassy appointment help'],
+    img: '/images/uae.jpg',
+    color: '#0496FF',
   },
   {
-    title: "Document Attestation",
-    desc: "Degree attestation, certificate verification, and embassy legalization services for overseas employment.",
-    icon: "fa-file-shield",
-    color: "bg-[#FFBC42]",
-    img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80",
+    id: 3, title: 'Career Counseling',
+    desc: 'One-on-one sessions help candidates identify the right destination, role, and growth path for their unique skills and aspirations.',
+    features: ['Skills assessment sessions', 'Industry & market insights', 'Interview preparation', 'Salary benchmarking'],
+    img: '/images/qatar.jpg',
+    color: '#FFBC42',
   },
   {
-    title: "Medical & Trade Test Coordination",
-    desc: "Scheduling and coordination of mandatory medical examinations and trade skill assessments.",
-    icon: "fa-stethoscope",
-    color: "bg-cta",
-    img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80",
+    id: 4, title: 'Medical & Travel Coordination',
+    desc: 'We coordinate medical exams, travel bookings, and pre-departure orientation so you arrive ready to work.',
+    features: ['Medical appointment scheduling', 'Flight booking assistance', 'Pre-departure orientation', 'Airport pickup coordination'],
+    img: '/images/oman.jpg',
+    color: '#D81159',
   },
   {
-    title: "Pre-Departure Orientation",
-    desc: "Cultural and practical orientation sessions preparing workers for life and work in their destination country.",
-    icon: "fa-chalkboard-user",
-    color: "bg-teal-600",
-    img: "https://images.unsplash.com/photo-1559223607-a43c990c692c?w=600&q=80",
+    id: 5, title: 'Employer Liaison',
+    desc: 'We work directly with vetted employers to ensure job offers, contracts, and conditions meet all legal and ethical standards.',
+    features: ['Contract verification', 'Employer background checks', 'Salary negotiation support', 'Ongoing employer relations'],
+    img: '/images/kuwait.jpg',
+    color: '#006BA6',
   },
   {
-    title: "Air Ticketing & Travel Support",
-    desc: "Competitive airfare arrangements and travel logistics support for a smooth departure experience.",
-    icon: "fa-plane",
-    color: "bg-primary",
-    img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80",
+    id: 6, title: 'Skills Training Referral',
+    desc: 'Candidates needing upskilling are referred to certified training partners for trade tests and certification programs.',
+    features: ['Training partner referrals', 'Trade test coordination', 'Certification assistance', 'Skill gap assessment'],
+    img: '/images/poland.jpg',
+    color: '#0496FF',
   },
   {
-    title: "Employer Verification",
-    desc: "Thorough background verification of overseas employers to ensure legitimate and safe placement.",
-    icon: "fa-magnifying-glass",
-    color: "bg-secondary",
-    img: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&q=80",
+    id: 7, title: 'Post-Placement Support',
+    desc: 'Our support doesn\'t end at departure. We stay in touch to ensure smooth settlement and address any workplace concerns.',
+    features: ['Follow-up check-ins', 'Emergency contact access', 'Workplace issue mediation', 'Repatriation assistance'],
+    img: '/images/greece.jpg',
+    color: '#FFBC42',
   },
   {
-    title: "Skilled & Unskilled Manpower Supply",
-    desc: "Comprehensive workforce solutions providing skilled professionals and general laborers to overseas employers.",
-    icon: "fa-people-group",
-    color: "bg-[#FFBC42]",
-    img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80",
+    id: 8, title: 'Gulf & European Specialist',
+    desc: 'Deep expertise in Saudi Arabia, UAE, Qatar, Kuwait, Oman, Germany, Poland, Greece, and South Korea placement.',
+    features: ['Market-specific guidance', 'Language prep resources', 'Cultural orientation', 'Destination country experts'],
+    img: '/images/south-korea.jpg',
+    color: '#D81159',
   },
 ];
 
-function ImgWithFallback({ src, alt, className }) {
-  const [failed, setFailed] = useState(false);
-  if (failed) {
-    return (
-      <div className={`${className} bg-gray-200 flex items-center justify-center`}>
-        <i className="fas fa-image text-gray-400 text-3xl"></i>
-      </div>
-    );
-  }
-  return <img src={src} alt={alt} className={className} onError={() => setFailed(true)} loading="lazy" />;
-}
-
 export default function Services() {
+  const [active, setActive] = useState(services[0]);
+
+  useEffect(() => {
+    const els = document.querySelectorAll('.sv-reveal');
+    const observer = new IntersectionObserver(
+      (entries) => { entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('show'); observer.unobserve(e.target); } }); },
+      { threshold: 0.12 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="services" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Pill */}
-        <div className="flex justify-center mb-14">
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-primary/10 text-primary border border-primary/20">
-            OUR SERVICES
-          </span>
+    <section id="services" style={{ padding: 'clamp(80px,10vw,130px) 24px', background: '#fff', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ maxWidth: 1160, margin: '0 auto' }}>
+        <div className="sv-reveal reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
+          <span className="section-pill"><i className="fas fa-briefcase" style={{ fontSize: 10 }} /> OUR SERVICES</span>
+          <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 'clamp(28px,5vw,46px)', color: 'var(--color-ink)', marginTop: 16, marginBottom: 16, letterSpacing: '-0.8px' }}>
+            What <span style={{ color: 'var(--color-primary)' }}>We Offer</span>
+          </h2>
         </div>
 
-        <div className="space-y-6">
-          {services.map((s, i) => {
-            const isLeft = i % 2 === 0;
-            const tintBg = s.color;
-            return (
-              <div
-                key={s.title}
-                className={`flex flex-col md:flex-row rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 ${
-                  isLeft ? "" : "md:flex-row-reverse"
-                }`}
-              >
-                {/* Text side */}
-                <div className={`${tintBg} text-white p-6 sm:p-8 md:p-10 flex-1 flex flex-col justify-center`}>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
-                      <i className={`fas ${s.icon} text-lg`}></i>
-                    </div>
-                    <h3 className="font-heading text-lg sm:text-xl font-bold">{s.title}</h3>
-                  </div>
-                  <p className="text-white/80 text-sm sm:text-base leading-relaxed max-w-md">{s.desc}</p>
+        {/* Image-preview showcase layout */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(240px, 340px) 1fr', gap: 32, alignItems: 'start' }}>
+          {/* Left menu */}
+          <div className="sv-reveal reveal-l" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {services.map((s) => (
+              <button key={s.id} onClick={() => setActive(s)}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 14, cursor: 'pointer', border: active.id === s.id ? `2px solid ${s.color}` : '1px solid rgba(0,107,166,0.1)', background: active.id === s.id ? `${s.color}08` : '#fff', textAlign: 'left', transition: 'all 0.25s', fontFamily: 'Inter, sans-serif' }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: `${s.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <i className="fas fa-circle" style={{ color: s.color, fontSize: 8 }} />
                 </div>
+                <span style={{ fontWeight: active.id === s.id ? 700 : 500, fontSize: 13.5, color: active.id === s.id ? s.color : '#4B5563' }}>{s.title}</span>
+              </button>
+            ))}
+          </div>
 
-                {/* Image side */}
-                <div className="w-full md:w-72 lg:w-80 h-52 md:h-auto flex-shrink-0 overflow-hidden">
-                  <ImgWithFallback
-                    src={s.img}
-                    alt={s.title}
-                    className="w-full h-full object-cover"
-                  />
+          {/* Right preview */}
+          <div className="sv-reveal reveal-r" style={{ borderRadius: 24, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,107,166,0.12)', border: '1px solid rgba(0,107,166,0.08)', background: '#fff' }}>
+            <div style={{ position: 'relative', height: 280, overflow: 'hidden' }}>
+              <img src={active.img} alt={active.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, transparent 30%, ${active.color}cc 100%)` }} />
+              <div style={{ position: 'absolute', bottom: 20, left: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: active.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fas fa-bolt" style={{ color: '#fff', fontSize: 18 }} />
                 </div>
+                <h3 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 22, color: '#fff' }}>{active.title}</h3>
               </div>
-            );
-          })}
+            </div>
+            <div style={{ padding: '28px 28px' }}>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14.5, color: '#4B5563', lineHeight: 1.75, marginBottom: 24 }}>{active.desc}</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+                {active.features.map((f) => (
+                  <span key={f} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600, background: `${active.color}10`, color: active.color, border: `1px solid ${active.color}25`, fontFamily: 'Inter, sans-serif' }}>
+                    <i className="fas fa-check-circle" style={{ fontSize: 11 }} /> {f}
+                  </span>
+                ))}
+              </div>
+              <a href={`https://wa.me/923334857777?text=Hello%20Qadir%20International%2C%20I%20am%20interested%20in%20${encodeURIComponent(active.title)}.`} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 10, fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 700, color: '#fff', textDecoration: 'none', background: active.color, transition: 'transform 0.25s', cursor: 'pointer' }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}>
+                <i className="fab fa-whatsapp" /> Enquire About This Service
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>

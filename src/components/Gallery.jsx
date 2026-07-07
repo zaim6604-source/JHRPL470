@@ -1,51 +1,27 @@
-import { useState } from "react";
+import useReveal from '../hooks/useReveal';
 
-const photos = [
-  {
-    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80",
-    alt: "Professional team collaboration",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80",
-    alt: "Office environment",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=600&q=80",
-    alt: "Team discussion",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80",
-    alt: "Team meeting",
-  },
+const images = [
+  { src: '/images/gallery-1.jpg', alt: 'Qadir International Office' },
+  { src: '/images/gallery-2.jpg', alt: 'Team at Work' },
+  { src: '/images/gallery-3.jpg', alt: 'Client Meeting' },
+  { src: '/images/gallery-4.jpg', alt: 'Departure Ceremony' },
 ];
 
-function ImgWithFallback({ src, alt, className }) {
-  const [failed, setFailed] = useState(false);
-  if (failed) {
-    return (
-      <div className={`${className} bg-gray-100 flex items-center justify-center rounded-xl`}>
-        <i className="fas fa-image text-gray-300 text-3xl"></i>
-      </div>
-    );
-  }
-  return <img src={src} alt={alt} className={className} onError={() => setFailed(true)} loading="lazy" />;
-}
-
 export default function Gallery() {
+  useReveal('.ga-reveal');
+
   return (
-    <section className="py-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-[clamp(60px,8vw,100px)] px-5" style={{ background: 'var(--color-background)' }}>
+      <div className="max-w-5xl mx-auto">
+        <div className="ga-reveal reveal text-center mb-12">
+          <h2 className="font-display font-extrabold" style={{ fontSize: 'clamp(24px,4vw,36px)', color: 'var(--color-ink)', letterSpacing: '-0.8px' }}>
+            Our <span style={{ color: 'var(--color-primary)' }}>Gallery</span>
+          </h2>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {photos.map((photo, i) => (
-            <div
-              key={i}
-              className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-            >
-              <ImgWithFallback
-                src={photo.src}
-                alt={photo.alt}
-                className="w-full h-48 sm:h-56 object-cover"
-              />
+          {images.map((img, i) => (
+            <div key={i} className="ga-reveal reveal rounded-2xl overflow-hidden" style={{ transitionDelay: `${i * 0.1}s`, aspectRatio: '1' }}>
+              <img src={img.src} alt={img.alt} className="w-full h-full object-cover img-zoom" onError={(e) => { e.target.src = '/images/fallback.jpg'; }} loading="lazy" />
             </div>
           ))}
         </div>

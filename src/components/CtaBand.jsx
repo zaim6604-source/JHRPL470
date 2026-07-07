@@ -1,41 +1,24 @@
 export default function CTABand() {
   return (
-    <section
-      className="py-16 relative overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #006BA6 0%, #0496FF 100%)",
-      }}
-    >
-      {/* Decorative circles */}
-      <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-white/5"></div>
-      <div className="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-white/5"></div>
-
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-4">
-          Ready to Start Your Overseas Journey?
+    <section className="py-16 px-5 relative overflow-hidden text-center"
+      style={{ background: 'linear-gradient(135deg, #006BA6 0%, #005580 50%, #0496FF 100%)' }}>
+      <div className="max-w-3xl mx-auto relative z-10">
+        <h2 className="font-display font-extrabold mb-4" style={{ fontSize: 'clamp(24px,4vw,38px)', color: '#fff', letterSpacing: '-0.8px' }}>
+          Ready to Work Abroad? <span style={{ color: '#FFBC42' }}>Let's Get You There.</span>
         </h2>
-        <p className="text-white/80 text-base sm:text-lg mb-8 max-w-2xl mx-auto">
-          Take the first step toward a better living. Contact Jabballian Overseas today and
-          let us guide you to trusted employment opportunities abroad.
+        <p className="text-base mb-8 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'Inter, sans-serif' }}>
+          Take the first step toward your international career today. Qadir International is here to guide you.
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <a
-            href="https://wa.me/923339941576"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-cta text-white px-8 py-3.5 rounded-lg text-base font-bold hover:bg-cta/90 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
-          >
-            <i className="fas fa-paper-plane"></i>
-            Apply Now
+        <div className="flex flex-wrap gap-4 justify-center">
+          <a href="https://wa.me/923334857777?text=Hello%20Qadir%20International%2C%20I%20want%20to%20apply%20for%20a%20job." target="_blank" rel="noopener noreferrer"
+            className="btn-primary no-underline"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#D81159', boxShadow: '0 4px 20px rgba(216,17,89,0.4)' }}>
+            <i className="fas fa-paper-plane" /> Apply Now
           </a>
-          <a
-            href="https://wa.me/923339941576"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-white/15 backdrop-blur-sm text-white px-8 py-3.5 rounded-lg text-base font-semibold hover:bg-white/25 transition-all border border-white/20 inline-flex items-center gap-2"
-          >
-            <i className="fab fa-whatsapp"></i>
-            Chat on WhatsApp
+          <a href="https://wa.me/923334857777" target="_blank" rel="noopener noreferrer"
+            className="btn-outline no-underline"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <i className="fab fa-whatsapp" /> Chat on WhatsApp
           </a>
         </div>
       </div>
