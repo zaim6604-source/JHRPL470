@@ -1,90 +1,85 @@
-import { useState, useEffect } from 'react';
-import useReveal from '../hooks/useReveal';
-
-const tabs = [
-  {
-    key: 'candidates',
-    label: 'For Candidates',
-    content: 'We connect skilled workers from Dera Ghazi Khan and surrounding regions with verified employers in the Gulf, Europe, and Asia. Our team handles screening, documentation, and pre-departure briefing so you can focus on your future.'
-  },
-  {
-    key: 'employers',
-    label: 'For Employers',
-    content: 'Qadir International provides end-to-end recruitment solutions — from sourcing and vetting qualified candidates to managing contracts and travel logistics. We ensure every placement meets your workforce requirements.'
-  },
-  {
-    key: 'whyus',
-    label: 'Why Us',
-    content: 'With License 2199/DGK and a decade of experience operating from Ghazi Road, D.G. Khan, we bring local insight and global reach. Our team is licensed, transparent, and committed to fair recruitment practices.'
-  }
-];
-
-const chips = [
-  { label: 'License 2199/DGK', icon: 'certificate' },
-  { label: '6-B, Saeed Commercial Centre', icon: 'location-dot' },
-  { label: 'Ghazi Road, D.G. Khan', icon: 'map-pin' },
-  { label: 'Punjab, Pakistan', icon: 'flag' },
-];
+import { useEffect, useRef } from 'react';
+import { site } from '../data/aleshahData';
 
 export default function About() {
-  useReveal('.ab-reveal');
-  const [activeTab, setActiveTab] = useState('candidates');
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (e) => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('show'); }),
+      { threshold: 0.12 }
+    );
+    ref.current?.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section id="about" style={{ padding: 'clamp(80px,10vw,130px) 24px', background: 'var(--color-background)', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: -200, right: -200, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,107,166,0.05), transparent 70%)', pointerEvents: 'none' }} />
+    <>
+      <style>{`
+        .ab-section { background:var(--white);padding:96px 24px; }
+        .ab-inner { max-width:1200px;margin:0 auto; }
+        .ab-grid { display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center; }
+        @media(max-width:900px){ .ab-grid{grid-template-columns:1fr;gap:40px} }
+        .ab-img { width:100%;height:480px;object-fit:cover;border-radius:24px;display:block;border:1px solid var(--card-border);box-shadow:0 4px 20px rgba(0,0,0,.04); }
+        .ab-img-wrap { position:relative; }
+        .ab-img-badge { position:absolute;background:var(--white);border:1px solid rgba(255,32,110,.15);border-radius:16px;padding:14px 20px;box-shadow:0 8px 32px rgba(0,0,0,.06); }
+        .ab-badge-n { font-weight:900;font-size:24px;color:var(--color-primary);line-height:1;font-family:'Plus Jakarta Sans',sans-serif; }
+        .ab-badge-l { font-size:12px;color:var(--ink-light);font-weight:600;margin-top:3px; }
+        .ab-title { font-weight:900;font-size:clamp(26px,3.2vw,38px);color:var(--ink);margin-bottom:16px;font-family:'Plus Jakarta Sans',sans-serif; }
+        .ab-body { font-size:15px;line-height:1.8;color:var(--ink-light);margin-bottom:14px; }
+        .ab-chips { display:flex;flex-wrap:wrap;gap:10px;margin-top:24px; }
+        .ab-chip { display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;background:rgba(255,32,110,.08);border:1px solid rgba(255,32,110,.15);color:var(--ink); }
+      `}</style>
 
-      <div style={{ maxWidth: 1160, margin: '0 auto' }}>
-        <div className="ab-reveal reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-          <span className="section-pill"><i className="fas fa-building" style={{ fontSize: 10 }} /> WHO WE ARE</span>
-          <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 'clamp(28px,5vw,46px)', color: 'var(--color-ink)', marginTop: 16, marginBottom: 16, letterSpacing: '-0.8px' }}>
-            About <span style={{ color: 'var(--color-primary)' }}>Qadir International</span>
-          </h2>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%,480px), 1fr))', gap: 48, alignItems: 'start' }}>
-          {/* Left – image with chips */}
-          <div className="ab-reveal reveal-l" style={{ position: 'relative' }}>
-            <div style={{ borderRadius: 24, overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,107,166,0.15)' }}>
-              <img src="/images/about-office.jpg" alt="Qadir International Office" style={{ width: '100%', height: 420, objectFit: 'cover', display: 'block' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 50%, rgba(0,85,128,0.6) 100%)' }} />
+      <section id="about" className="ab-section" ref={ref}>
+        <div className="ab-inner">
+          <div style={{textAlign:'center',marginBottom:56}} className="reveal">
+            <div className="section-pill" style={{margin:'0 auto 18px'}}>
+              <span className="pill-dot" />WHO WE ARE
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>
-              {chips.map((c) => (
-                <span key={c.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 99, fontSize: 11, fontWeight: 600, letterSpacing: '0.05em', background: 'rgba(0,107,166,0.08)', color: 'var(--color-primary)', border: '1px solid rgba(0,107,166,0.2)', fontFamily: 'Inter, sans-serif' }}>
-                  <i className={`fas fa-${c.icon}`} style={{ fontSize: 10 }} /> {c.label}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Right – tabbed content */}
-          <div className="ab-reveal reveal-r">
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#4B5563', lineHeight: 1.75, marginBottom: 24 }}>
-              Based at <strong>6-B, Saeed Commercial Centre, Ghazi Road, Dera Ghazi Khan, Punjab</strong>, Qadir International (License <strong>2199/DGK</strong>) is a government-licensed overseas employment promoter serving workers across southern Punjab.
+            <h2 style={{fontWeight:900,fontSize:'clamp(30px,4vw,46px)',color:'var(--ink)',marginBottom:16}}>
+              About <span style={{color:'var(--color-primary)'}}>Al Eshah International</span>
+            </h2>
+            <p style={{color:'var(--ink-light)',fontSize:16,maxWidth:560,margin:'0 auto',lineHeight:1.7}}>
+              A government-licensed recruiting and overseas employment agency based on Commissioner Road, Sialkot — connecting talent with global opportunities.
             </p>
+          </div>
 
-            {/* Tab buttons */}
-            <div style={{ display: 'flex', gap: 6, marginBottom: 24, flexWrap: 'wrap' }}>
-              {tabs.map((tab) => (
-                <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-                  style={{ padding: '10px 18px', borderRadius: 10, fontFamily: 'Inter, sans-serif', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: activeTab === tab.key ? 'none' : '1px solid rgba(0,107,166,0.2)', background: activeTab === tab.key ? 'var(--color-primary)' : 'transparent', color: activeTab === tab.key ? '#fff' : 'var(--color-primary)', transition: 'all 0.25s' }}>
-                  {tab.label}
-                </button>
-              ))}
+          <div className="ab-grid">
+            <div className="ab-img-wrap reveal-l">
+              <img src="/images/hero-2.jpg" alt="Al Eshah office" className="ab-img" />
+              <div className="ab-img-badge float" style={{top:-16,right:-16}}>
+                <div className="ab-badge-n">2197</div>
+                <div className="ab-badge-l">License / SKT</div>
+              </div>
+              <div className="ab-img-badge float" style={{bottom:-16,left:-16,animationDelay:'2s'}}>
+                <div className="ab-badge-n">Commissioner</div>
+                <div className="ab-badge-l">Road, Sialkot</div>
+              </div>
             </div>
 
-            {/* Tab content */}
-            <div style={{ background: '#fff', borderRadius: 18, padding: '24px 28px', boxShadow: '0 4px 20px rgba(0,107,166,0.06)', border: '1px solid rgba(0,107,166,0.08)', minHeight: 120 }}>
-              {tabs.map((tab) => (
-                <div key={tab.key} style={{ display: activeTab === tab.key ? 'block' : 'none' }}>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14.5, color: '#4B5563', lineHeight: 1.8 }}>{tab.content}</p>
-                </div>
-              ))}
+            <div className="reveal-r">
+              <div className="section-pill" style={{borderColor:'rgba(65,234,212,.25)',color:'var(--color-accent)'}}>
+                <span className="pill-dot" style={{background:'var(--color-accent)'}} />
+                Commissioner Road, Sialkot — Punjab
+              </div>
+              <h3 className="ab-title">
+                Trusted Partner for <span style={{color:'var(--color-primary)'}}>Overseas Employment</span>
+              </h3>
+              <p className="ab-body">{site.about.para1}</p>
+              <p className="ab-body">{site.about.para2}</p>
+              <div className="ab-chips">
+                {site.about.chips.map((c, i) => (
+                  <span key={i} className="ab-chip">
+                    <i className={c.icon} style={{color:'var(--color-primary)',fontSize:12}}></i>
+                    {c.label}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

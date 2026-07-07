@@ -1,67 +1,89 @@
-import useReveal from '../hooks/useReveal';
+import { useEffect, useRef, useState } from 'react';
+import { site } from '../data/aleshahData';
 
-const countries = [
-  { name: 'Saudi Arabia', img: '/images/saudi.jpg', roles: ['Construction', 'Drivers', 'Hospitality'], color: '#006BA6' },
-  { name: 'UAE', img: '/images/uae.jpg', roles: ['Hospitality', 'Retail', 'Technicians'], color: '#0496FF' },
-  { name: 'Qatar', img: '/images/qatar.jpg', roles: ['Construction', 'Hospitality'], color: '#FFBC42' },
-  { name: 'Oman', img: '/images/oman.jpg', roles: ['Security', 'Drivers', 'Tourism'], color: '#0496FF' },
-  { name: 'Kuwait', img: '/images/kuwait.jpg', roles: ['Drivers', 'Labour'], color: '#D81159' },
-  { name: 'Germany', img: '/images/saudi.jpg', roles: ['Nurses', 'Trades', 'IT'], color: '#006BA6' },
-  { name: 'Poland', img: '/images/poland.jpg', roles: ['Manufacturing', 'Logistics'], color: '#0496FF' },
-  { name: 'Greece', img: '/images/greece.jpg', roles: ['Tourism', 'Hospitality', 'Agriculture'], color: '#FFBC42' },
-  { name: 'South Korea', img: '/images/south-korea.jpg', roles: ['Factory', 'Manufacturing'], color: '#D81159' },
-];
+const FALLBACK = 'https://via.placeholder.com/600x400/FFF8E0/FF206E?text=Al+Eshah';
 
 export default function Countries() {
-  useReveal('.co-reveal');
+  const ref = useRef(null);
+  const [imgErrs, setImgErrs] = useState({});
+  const h = (k) => setImgErrs(p => ({...p, [k]: true}));
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (e) => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('show'); }),
+      { threshold: 0.08 }
+    );
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section id="countries" className="py-[clamp(80px,10vw,120px)] px-5 relative overflow-hidden" style={{ background: 'var(--color-background)' }}>
-      <div className="max-w-6xl mx-auto">
-        <div className="co-reveal reveal text-center mb-14">
-          <span className="section-pill"><i className="fas fa-globe" style={{ fontSize: 10 }} /> DESTINATIONS</span>
-          <h2 className="font-display font-extrabold mt-4 mb-4" style={{ fontSize: 'clamp(28px,5vw,44px)', color: 'var(--color-ink)', letterSpacing: '-0.8px' }}>
-            Country <span style={{ color: 'var(--color-primary)' }}>Guide</span>
-          </h2>
-          <p className="text-base max-w-xl mx-auto leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-            Gulf and European destinations for Dera Ghazi Khan's workforce.
-          </p>
-        </div>
+    <>
+      <style>{`
+        .co-section { background:var(--white);padding:96px 24px; }
+        .co-inner { max-width:1200px;margin:0 auto; }
+        .co-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:20px; }
+        @media(max-width:900px){ .co-grid{grid-template-columns:repeat(2,1fr)} }
+        @media(max-width:480px){ .co-grid{grid-template-columns:1fr} }
+        .co-card { border-radius:16px;overflow:hidden;border:1px solid rgba(255,32,110,.12);transition:transform .35s,box-shadow .35s;background:var(--white); }
+        .co-card:hover { transform:translateY(-5px);box-shadow:0 12px 32px rgba(255,32,110,.1); }
+        .co-card-img { width:100%;height:180px;object-fit:cover;display:block;transition:transform .5s; }
+        .co-card:hover .co-card-img { transform:scale(1.05); }
+        .co-card-img-wrap { overflow:hidden;position:relative; }
+        .co-card-overlay { position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent);padding:12px 16px; }
+        .co-card-flag { font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3)); }
+        .co-chip-grid { display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:32px; }
+        .co-chip { display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:700;transition:transform .2s;cursor:default;border:1px solid rgba(255,32,110,.1); }
+        .co-chip:hover { transform:translateY(-2px); }
+      `}</style>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {countries.map((c, i) => (
-            <div key={c.name}
-              className="co-reveal reveal rounded-2xl overflow-hidden bg-white transition-all duration-300"
-              style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid rgba(0,107,166,0.08)', transitionDelay: `${i * 0.06}s` }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,107,166,0.14)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.06)'; }}>
-              <div className="overflow-hidden h-[180px]">
-                <img src={c.img} alt={c.name} className="w-full h-[180px] object-cover img-zoom" onError={(e) => { e.target.src = '/images/fallback.jpg'; }} loading="lazy" />
-              </div>
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <span style={{ fontSize: 18 }}><i className="fas fa-location-dot" style={{ color: c.color }} /></span>
-                  <h3 className="font-display font-bold text-[17px]" style={{ color: 'var(--color-ink)' }}>{c.name}</h3>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {c.roles.map((r) => (
-                    <span key={r} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: `${c.color}15`, color: c.color, border: `1px solid ${c.color}25`, fontFamily: 'Inter, sans-serif' }}>{r}</span>
-                  ))}
-                </div>
-              </div>
+      <section id="countries" className="co-section" ref={ref}>
+        <div className="co-inner">
+          <div style={{textAlign:'center',marginBottom:48}} className="reveal">
+            <div className="section-pill" style={{margin:'0 auto 18px'}}>
+              <span className="pill-dot" />DESTINATIONS
             </div>
-          ))}
-        </div>
+            <h2 style={{fontWeight:900,fontSize:'clamp(28px,3.5vw,42px)',color:'var(--ink)',marginBottom:14}}>
+              Countries We <span style={{color:'var(--color-primary)'}}>Serve</span>
+            </h2>
+            <p style={{color:'var(--ink-light)',fontSize:15,maxWidth:520,margin:'0 auto',lineHeight:1.7}}>
+              Trusted placements across the Gulf, Europe, and Asia — verified employers in every destination.
+            </p>
+          </div>
 
-        <div className="co-reveal reveal text-center">
-          <p className="text-sm font-semibold mb-4" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>All Destination Countries</p>
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {countries.map((c) => (
-              <span key={c.name} className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold" style={{ background: c.color, color: '#fff', fontFamily: 'Inter, sans-serif' }}>{c.name}</span>
+          <div className="co-grid">
+            {site.countries.map((c, i) => (
+              <div key={i} className="co-card reveal" style={{transitionDelay:`${(i%3)*0.1}s`}}>
+                <div className="co-card-img-wrap">
+                  <img src={imgErrs[c.name] ? FALLBACK : c.img} alt={c.name} className="co-card-img" onError={() => h(c.name)} loading="lazy" />
+                  <div className="co-card-overlay">
+                    <span className="co-card-flag">{c.flag}</span>
+                  </div>
+                </div>
+                <div style={{padding:'16px 18px 18px'}}>
+                  <div style={{fontWeight:800,fontSize:17,color:'var(--ink)',marginBottom:6,fontFamily:'Plus Jakarta Sans,sans-serif'}}>{c.name}</div>
+                  <div style={{fontSize:13,color:'var(--ink-light)',lineHeight:1.5}}>
+                    <i className="fa-solid fa-briefcase" style={{marginRight:6,color:'var(--color-primary)',fontSize:11}}></i>
+                    {c.roles}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="co-chip-grid reveal" style={{transitionDelay:'.3s'}}>
+            {site.countryChips.map((c, i) => (
+              <span key={i} className="co-chip" style={{
+                background: [
+                  'rgba(255,32,110,.1)','rgba(251,255,18,.15)','rgba(65,234,212,.1)','rgba(212,0,90,.08)',
+                  'rgba(255,32,110,.06)','rgba(65,234,212,.08)','rgba(251,255,18,.1)','rgba(212,0,90,.06)',
+                  'rgba(255,32,110,.08)','rgba(65,234,212,.06)','rgba(251,255,18,.12)','rgba(212,0,90,.1)',
+                ][i] || 'rgba(255,32,110,.06)',
+              }}>{c}</span>
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

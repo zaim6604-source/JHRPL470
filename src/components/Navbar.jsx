@@ -1,121 +1,106 @@
 import { useState, useEffect } from 'react';
+import { site } from '../data/aleshahData';
 
 const links = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'services', label: 'Services' },
-  { id: 'countries', label: 'Destinations' },
-  { id: 'process', label: 'Process' },
-  { id: 'contact', label: 'Contact' },
+  { label: 'Home', id: 'home' },
+  { label: 'Process', id: 'process' },
+  { label: 'About', id: 'about' },
+  { label: 'Services', id: 'services' },
+  { label: 'Destinations', id: 'countries' },
+  { label: 'Contact', id: 'contact' },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const [solid, setSolid] = useState(false);
+  const [open, setOpen] = useState(false);
   const [active, setActive] = useState('home');
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-      const sections = links.map((l) => document.getElementById(l.id));
-      const scrollPos = window.scrollY + 120;
-      for (let i = sections.length - 1; i >= 0; i--) {
-        if (sections[i] && sections[i].offsetTop <= scrollPos) {
-          setActive(links[i].id);
-          break;
-        }
+    const fn = () => {
+      setSolid(window.scrollY > 50);
+      const ids = links.map(l => l.id);
+      for (let i = ids.length - 1; i >= 0; i--) {
+        const el = document.getElementById(ids[i]);
+        if (el && window.scrollY >= el.offsetTop - 130) { setActive(ids[i]); break; }
       }
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    setMenuOpen(false);
-  };
+  const go = (id) => { setOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); };
 
   return (
     <>
-      <nav
-        style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0,
-          zIndex: 1000,
-          transition: 'background 0.3s, box-shadow 0.3s',
-          background: scrolled ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.95)',
-          backdropFilter: 'blur(14px)',
-          boxShadow: '0 1px 30px rgba(0,107,166,0.08)',
-          borderBottom: '1px solid rgba(0,107,166,0.06)',
-        }}
-      >
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 70, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <button onClick={() => scrollTo('home')} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #006BA6, #0496FF)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,107,166,0.35)' }}>
-              <i className="fas fa-globe-asia" style={{ color: '#fff', fontSize: 18 }} />
+      <style>{`
+        .nb-wrap { position:fixed;top:0;left:0;right:0;z-index:9999;transition:background .35s,box-shadow .35s,backdrop-filter .35s; }
+        .nb-wrap.solid { background:rgba(255,255,255,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1px 0 rgba(255,32,110,.1),0 4px 24px rgba(255,32,110,.06); }
+        .nb-inner { max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;transition:height .3s; }
+        .nb-links { display:flex;align-items:center;gap:2px; }
+        .nb-btn { background:none;border:none;cursor:pointer;font-weight:600;font-size:14px;padding:8px 14px;border-radius:10px;transition:all .2s;position:relative;font-family:'Inter',sans-serif; }
+        .nb-btn::after { content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:0;height:2px;border-radius:99px;background:var(--color-primary);transition:width .25s; }
+        .nb-btn.on::after { width:calc(100% - 20px); }
+        .nb-cta { display:inline-flex;align-items:center;gap:8px;background:var(--color-cta);color:var(--ink);font-weight:800;font-size:14px;padding:10px 22px;border-radius:10px;border:none;cursor:pointer;transition:transform .25s,box-shadow .25s;margin-left:6px;font-family:'Inter',sans-serif; }
+        .nb-cta.outline { background:transparent;border:2px solid rgba(65,234,212,.5);color:var(--color-cta); }
+        .nb-cta:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(65,234,212,.4); }
+        .nb-cta.outline:hover { background:rgba(65,234,212,.1);border-color:var(--color-cta); }
+        .hbg { background:none;border:none;cursor:pointer;padding:8px;display:none; }
+        .hbg-bar { display:block;height:2px;border-radius:2px;transition:all .25s; }
+        .mob-menu { background:#fff;overflow:hidden;transition:max-height .35s ease,box-shadow .35s;border-bottom:1px solid rgba(255,32,110,.1); }
+        @media(max-width:768px){
+          .nb-links,.nb-cta-nomob{display:none!important}
+          .hbg{display:block!important}
+        }
+      `}</style>
+
+      <nav className={`nb-wrap${solid ? ' solid' : ''}`}>
+        <div className="nb-inner" style={{ height: solid ? 64 : 76 }}>
+          <button onClick={() => go('home')} style={{display:'flex',alignItems:'center',gap:11,background:'none',border:'none',cursor:'pointer'}}>
+            <div style={{width:42,height:42,borderRadius:12,background:'var(--color-primary)',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 4px 14px rgba(255,32,110,.35)',flexShrink:0}}>
+              <i className="fa-solid fa-earth-asia" style={{color:'#fff',fontSize:18}}></i>
             </div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 17, color: '#06283D', letterSpacing: '-0.3px', lineHeight: 1.1, transition: 'color 0.3s' }}>
-                Qadir International
-              </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, borderRadius: 6, padding: '1px 7px', marginTop: 2 }}>
-                <span style={{ fontSize: 9, fontWeight: 700, color: '#006BA6' , letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'color 0.3s' }}>
-                  2199/DGK
-                </span>
-              </div>
+            <div style={{textAlign:'left'}}>
+              <div style={{fontWeight:800,fontSize:16,lineHeight:1.1,color:'var(--ink)',fontFamily:'Plus Jakarta Sans,sans-serif'}}>Al Eshah</div>
+              <div style={{fontSize:10,fontWeight:600,letterSpacing:'.07em',color:'var(--color-primary)',marginTop:1}}>License 2197 / SKT</div>
             </div>
           </button>
 
-          <div className="hidden-mobile" style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            {links.map((l) => (
-              <button key={l.id} onClick={() => scrollTo(l.id)} className={`nav-link${active === l.id ? ' active' : ''}`}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 13, color: active === l.id ? '#006BA6' : '#4B5563', padding: '4px 0', transition: 'color 0.3s' }}>
+          <div className="nb-links">
+            {links.map(l => (
+              <button key={l.id} onClick={() => go(l.id)}
+                className={`nb-btn ${active===l.id?'on':''}`}
+                style={{color: active===l.id ? 'var(--color-primary)' : 'var(--ink-light)', background: active===l.id ? 'rgba(255,32,110,.06)' : 'transparent'}}
+              >
                 {l.label}
               </button>
             ))}
-            <button
-              onClick={() => window.open('https://wa.me/923334857777?text=Hello%20Qadir%20International%2C%20I%20want%20to%20apply%20for%20a%20job.', '_blank')}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 10, fontFamily: 'Inter, sans-serif', fontSize: 13, fontWeight: 700, color: '#fff', cursor: 'pointer', border: 'none', background: '#D81159', boxShadow: '0 4px 16px rgba(216,17,89,0.35)', transition: 'transform 0.25s, box-shadow 0.25s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(216,17,89,0.5)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(216,17,89,0.35)'; }}
-            >
-              <i className="fas fa-paper-plane" style={{ fontSize: 12 }} /> Apply
+            <button className="nb-cta nb-cta-nomob" onClick={() => window.open(site.whatsappLink, '_blank')}>
+              <i className="fa-brands fa-whatsapp"></i> Apply Now
             </button>
           </div>
 
-          <button onClick={() => setMenuOpen(!menuOpen)} className="show-mobile"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#06283D', display: 'none', padding: 4, fontSize: 22 }}>
-            <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`} />
+          <button className="hbg" onClick={() => setOpen(!open)} aria-label="Menu">
+            <span className="hbg-bar" style={{width:24,background:'var(--ink)',transform:open?'rotate(45deg) translate(5px,5px)':'none'}}/>
+            <span className="hbg-bar" style={{width:open?0:18,background:'var(--color-primary)',margin:'5px 0',opacity:open?0:1}}/>
+            <span className="hbg-bar" style={{width:24,background:'var(--ink)',transform:open?'rotate(-45deg) translate(5px,-5px)':'none'}}/>
           </button>
+        </div>
+
+        <div className="mob-menu" style={{maxHeight:open?400:0,boxShadow:open?'0 8px 30px rgba(0,0,0,.08)':'none',borderTop:open?'1px solid rgba(255,32,110,.1)':'none'}}>
+          <div style={{padding:'12px 20px 20px',display:'flex',flexDirection:'column',gap:4}}>
+            {links.map(l => (
+              <button key={l.id} onClick={() => go(l.id)} style={{
+                background:active===l.id?'rgba(255,32,110,.08)':'none',border:'none',cursor:'pointer',
+                textAlign:'left',padding:'12px 16px',borderRadius:10,
+                fontWeight:600,fontSize:15,color:active===l.id?'var(--color-primary)':'var(--ink-light)',
+              }}>{l.label}</button>
+            ))}
+            <button onClick={() => window.open(site.whatsappLink, '_blank')} className="nb-cta" style={{marginTop:8,justifyContent:'center',borderRadius:10,fontSize:15}}>
+              <i className="fa-brands fa-whatsapp"></i> Apply Now
+            </button>
+          </div>
         </div>
       </nav>
-
-      <div style={{ position: 'fixed', top: 70, left: 0, right: 0, zIndex: 999, background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(0,107,166,0.1)', padding: menuOpen ? '20px 24px 24px' : '0 24px', maxHeight: menuOpen ? 360 : 0, overflow: 'hidden', transition: 'max-height 0.35s ease, padding 0.35s ease', boxShadow: '0 8px 30px rgba(0,107,166,0.08)' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          {links.map((l) => (
-            <button key={l.id} onClick={() => scrollTo(l.id)}
-              style={{ background: active === l.id ? 'rgba(0,107,166,0.07)' : 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 15, color: active === l.id ? '#006BA6' : '#374151', padding: '12px 16px', borderRadius: 10, textAlign: 'left' }}>
-              {l.label}
-            </button>
-          ))}
-          <button onClick={() => window.open('https://wa.me/923334857777?text=Hello%20Qadir%20International%2C%20I%20want%20to%20apply.', '_blank')}
-            style={{ marginTop: 8, justifyContent: 'center', width: '100%', display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 20px', borderRadius: 10, fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 700, color: '#fff', cursor: 'pointer', border: 'none', background: '#D81159', boxShadow: '0 4px 16px rgba(216,17,89,0.35)' }}>
-            <i className="fas fa-paper-plane" /> Apply Now
-          </button>
-        </div>
-      </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
-        }
-        @media (min-width: 769px) {
-          .hidden-mobile { display: flex !important; }
-          .show-mobile { display: none !important; }
-        }
-      `}</style>
     </>
   );
 }

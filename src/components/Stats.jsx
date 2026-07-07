@@ -1,49 +1,44 @@
-import { useEffect, useRef, useState } from 'react';
-
-function Counter({ end, suffix = '', label }) {
-  const ref = useRef(null);
-  const [count, setCount] = useState(0);
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !shown) { setShown(true); obs.unobserve(el); }
-    }, { threshold: 0.5 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [shown]);
-
-  useEffect(() => {
-    if (!shown) return;
-    let start = 0;
-    const step = Math.ceil(end / 50);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= end) { setCount(end); clearInterval(timer); }
-      else setCount(start);
-    }, 30);
-    return () => clearInterval(timer);
-  }, [shown, end]);
-
-  return (
-    <div ref={ref} className="text-center">
-      <div className="font-display font-extrabold" style={{ fontSize: 'clamp(36px,5vw,52px)', color: '#fff' }}>{count.toLocaleString()}{suffix}</div>
-      <div className="text-sm font-medium mt-1" style={{ color: '#E6F3FB', fontFamily: 'Inter, sans-serif' }}>{label}</div>
-    </div>
-  );
-}
+import { useEffect, useRef } from 'react';
+import { site } from '../data/aleshahData';
 
 export default function Stats() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (e) => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('show'); }),
+      { threshold: 0.3 }
+    );
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section className="py-14 md:py-16" style={{ background: 'var(--color-primary)' }}>
-      <div className="max-w-5xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
-        <Counter end={3500} suffix="+" label="Workers Placed" />
-        <Counter end={10} suffix="+" label="Countries" />
-        <Counter end={12} suffix="+" label="Years Serving" />
-        <Counter end={100} suffix="%" label="Licensed & Verified" />
+    <>
+      <style>{`
+        .st-section { background:var(--color-primary);padding:48px 24px; }
+        .st-inner { max-width:1000px;margin:0 auto; }
+        .st-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:0; }
+        @media(max-width:640px){ .st-grid{grid-template-columns:repeat(2,1fr);gap:20px} }
+        .st-item { text-align:center;padding:0 16px; }
+        .st-item:not(:last-child) { border-right:1px solid rgba(255,255,255,.2); }
+        @media(max-width:640px){ .st-item:nth-child(2){border-right:none} .st-item:nth-child(3){border-right:1px solid rgba(255,255,255,.2)} }
+        .st-num { font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:clamp(28px,3.5vw,40px);color:var(--color-secondary);line-height:1;margin-bottom:4px; }
+        .st-label { font-size:13px;font-weight:600;color:rgba(255,255,255,.85);letter-spacing:.02em; }
+      `}</style>
+
+      <div className="st-section" ref={ref}>
+        <div className="st-inner">
+          <div className="st-grid reveal">
+            {site.stats.map((s, i) => (
+              <div key={i} className="st-item">
+                <div className="st-num">{s.n}</div>
+                <div className="st-label">{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </section>
+    </>
   );
 }

@@ -1,98 +1,98 @@
 import { useEffect, useRef } from 'react';
-
-const statChips = [
-  { n: '500+', l: 'Workers Placed' },
-  { n: '15+', l: 'Countries' },
-  { n: '10+', l: 'Years Experience' },
-  { n: '2199', l: 'License / DGK' },
-];
+import { site } from '../data/aleshahData';
 
 export default function Hero() {
-  const h1Ref = useRef(null);
-  const subRef = useRef(null);
-  const ctaRef = useRef(null);
+  const ref = useRef(null);
 
   useEffect(() => {
-    const els = [h1Ref, subRef, ctaRef];
-    els.forEach((ref, i) => {
-      if (ref.current) {
-        ref.current.style.opacity = 0;
-        ref.current.style.transform = 'translateY(28px)';
-        setTimeout(() => {
-          if (ref.current) {
-            ref.current.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
-            ref.current.style.opacity = 1;
-            ref.current.style.transform = 'translateY(0)';
-          }
-        }, 200 + i * 150);
-      }
-    });
+    const timer = setTimeout(() => {
+      ref.current?.querySelectorAll('.h-reveal').forEach((el, i) => {
+        setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, i * 120);
+      });
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <section id="home" style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/images/hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(0,107,166,0.75) 0%, rgba(4,150,255,0.55) 50%, rgba(0,85,128,0.7) 100%)', zIndex: 1 }} />
+    <>
+      <style>{`
+        .h-reveal { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+        .bento-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:1200px;margin:0 auto; }
+        @media(max-width:900px){ .bento-grid{grid-template-columns:1fr 1fr} }
+        @media(max-width:560px){ .bento-grid{grid-template-columns:1fr} }
+        .bento-tile { border-radius:20px;overflow:hidden;position:relative;transition:transform .3s,box-shadow .3s; }
+        .bento-tile:hover { transform:translateY(-4px);box-shadow:0 12px 40px rgba(255,32,110,.1); }
+        .bento-photo { width:100%;height:100%;object-fit:cover;display:block; }
+        .bento-photo-wrap { overflow:hidden; }
+        .bento-photo-wrap img { transition:transform .6s; }
+        .bento-photo-wrap:hover img { transform:scale(1.06); }
+      `}</style>
 
-      <div style={{ position: 'relative', zIndex: 4, width: '100%', maxWidth: 1100, margin: '0 auto', padding: '80px 24px 0' }}>
-        {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid rgba(255,188,66,0.4)', paddingBottom: 12, marginBottom: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <i className="fas fa-globe-asia" style={{ color: '#FFBC42', fontSize: 16 }} />
+      <section id="home" ref={ref} style={{padding:'40px 24px 60px',position:'relative',overflow:'hidden',marginTop:76}}>
+        <div className="bento-grid">
+          {/* Headline tile - spans 2 cols */}
+          <div className="bento-tile h-reveal" style={{gridColumn:'span 2',background:'var(--white)',border:'1px solid var(--card-border)',padding:'36px 32px',display:'flex',flexDirection:'column',justifyContent:'center'}}>
+            <div className="section-pill" style={{marginBottom:18}}>
+              <span className="pill-dot" />
+              Al Eshah International · License 2197/SKT
             </div>
-            <div>
-              <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff', letterSpacing: '-0.3px' }}>Qadir International</div>
-              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: '#FFBC42', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600 }}>License 2199/DGK · Overseas Employment</div>
-            </div>
-          </div>
-          <div style={{ border: '2px solid rgba(255,188,66,0.5)', borderRadius: 8, padding: '4px 12px', transform: 'rotate(3deg)' }}>
-            <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 13, color: '#FFBC42', letterSpacing: '0.05em' }}>2199/DGK</span>
-          </div>
-        </div> */}
-
-        <div ref={h1Ref} style={{ maxWidth: 760 }}>
-          <h1 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 'clamp(36px, 7vw, 68px)', color: '#fff', lineHeight: 1.08, letterSpacing: '-1.5px', marginBottom: 20 }}>
-            Dependable Recruitment,<br /><span style={{ color: '#FFBC42' }}>Powered by Real Results</span>
-          </h1>
-          <p ref={subRef} style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(15px, 2vw, 18px)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, maxWidth: 600, marginBottom: 32 }}>
-            Qadir International moves Dera Ghazi Khan's workers into secure Gulf and European jobs — licensed and thorough.
-          </p>
-
-          <div ref={ctaRef} style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 40 }}>
-            <a href="https://wa.me/923334857777?text=Hello%20Qadir%20International%2C%20I%20want%20to%20apply%20for%20a%20job." target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 28px', borderRadius: 12, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer', textDecoration: 'none', background: '#D81159', boxShadow: '0 4px 20px rgba(216,17,89,0.4)', transition: 'transform 0.25s, box-shadow 0.25s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(216,17,89,0.6)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(216,17,89,0.4)'; }}>
-              <i className="fas fa-paper-plane" /> Apply Now
-            </a>
-            <a href="https://wa.me/923334857777" target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 12, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, color: '#fff', cursor: 'pointer', textDecoration: 'none', background: 'transparent', border: '2px solid rgba(255,255,255,0.35)', transition: 'background 0.25s, border-color 0.25s, transform 0.25s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.7)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
-              <i className="fab fa-whatsapp" /> WhatsApp
-            </a>
+            <h1 style={{fontWeight:900,fontSize:'clamp(32px,5vw,56px)',color:'var(--ink)',lineHeight:1.08,marginBottom:16}}>
+              {site.headline}
+            </h1>
+            <p style={{fontSize:'clamp(14px,1.6vw,17px)',color:'var(--ink-light)',lineHeight:1.7,maxWidth:560}}>
+              {site.subheadline}
+            </p>
           </div>
 
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,188,66,0.15)', border: '1px solid rgba(255,188,66,0.25)', borderRadius: 99, padding: '4px 14px', marginBottom: 32 }}>
-            <i className="fas fa-certificate" style={{ color: '#FFBC42', fontSize: 11 }} />
-            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, color: '#FFBC42', letterSpacing: '0.05em' }}>Government Licensed — 2199/DGK</span>
+          {/* Photo tile 1 */}
+          <div className="bento-tile bento-photo-wrap h-reveal" style={{transitionDelay:'.1s',minHeight:240}}>
+            <img src="/images/about.jpg" alt="Office" className="bento-photo" style={{height:'100%'}} />
+          </div>
+
+          {/* Stat tile */}
+          <div className="bento-tile h-reveal" style={{transitionDelay:'.2s',background:'var(--color-primary)',padding:'28px 24px',display:'flex',flexDirection:'column',justifyContent:'center',gap:24}}>
+            {site.stats.slice(0,3).map((s, i) => (
+              <div key={i} style={{textAlign:'center'}}>
+                <div style={{fontWeight:900,fontSize:'clamp(22px,2.5vw,28px)',color:'var(--color-secondary)',lineHeight:1,fontFamily:'Plus Jakarta Sans,sans-serif'}}>{s.n}</div>
+                <div style={{fontSize:12,fontWeight:600,color:'rgba(255,255,255,.8)',marginTop:4}}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Photo tile 2 */}
+          <div className="bento-tile bento-photo-wrap h-reveal" style={{transitionDelay:'.15s',minHeight:200}}>
+            <img src="/images/gallery-1.jpg" alt="Team" className="bento-photo" style={{height:'100%'}} />
+          </div>
+
+          {/* CTA tile - Apply */}
+          <div className="bento-tile h-reveal" style={{transitionDelay:'.25s',background:'var(--color-cta)',padding:'24px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:12}}>
+            <button onClick={() => window.open(site.whatsappLink, '_blank')} style={{
+              display:'inline-flex',alignItems:'center',gap:10,background:'var(--ink)',color:'#fff',
+              fontWeight:800,fontSize:15,padding:'14px 28px',borderRadius:12,border:'none',cursor:'pointer',
+              transition:'transform .25s',fontFamily:'Inter,sans-serif',
+            }} onMouseEnter={e=>e.currentTarget.style.transform='translateY(-2px)'}
+               onMouseLeave={e=>e.currentTarget.style.transform='none'}
+            >
+              <i className="fa-brands fa-whatsapp"></i> Apply Now
+            </button>
+            <button onClick={() => window.open(site.whatsappLink, '_blank')} style={{
+              display:'inline-flex',alignItems:'center',gap:8,background:'transparent',color:'var(--ink)',
+              fontWeight:600,fontSize:13,border:'2px solid rgba(26,20,35,.2)',padding:'10px 22px',borderRadius:12,cursor:'pointer',
+              transition:'all .25s',fontFamily:'Inter,sans-serif',
+            }} onMouseEnter={e=>{e.currentTarget.style.borderColor='var(--ink)';e.currentTarget.style.background='rgba(26,20,35,.05)'}}
+               onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(26,20,35,.2)';e.currentTarget.style.background='transparent'}}
+            >
+              <i className="fa-brands fa-whatsapp"></i> WhatsApp
+            </button>
+          </div>
+
+          {/* Badge tile */}
+          <div className="bento-tile h-reveal" style={{transitionDelay:'.3s',background:'var(--color-secondary)',padding:'20px',display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+            <i className="fa-solid fa-certificate" style={{color:'var(--ink)',fontSize:20}}></i>
+            <div style={{fontWeight:800,fontSize:14,color:'var(--ink)',fontFamily:'Plus Jakarta Sans,sans-serif'}}>{site.license}</div>
           </div>
         </div>
-
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(16px, 3vw, 36px)', flexWrap: 'wrap', padding: '18px 28px', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 16 }}>
-          {statChips.map((s) => (
-            <div key={s.l} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: 'clamp(20px, 3vw, 28px)', color: '#fff', lineHeight: 1 }}>{s.n}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', fontFamily: 'Inter, sans-serif', marginTop: 4, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{s.l}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <button onClick={() => { const el = document.getElementById('about'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
-        style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 5, background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: 16, animation: 'floatY 2s ease-in-out infinite' }}>
-        <i className="fas fa-chevron-down" />
-      </button>
-    </section>
+      </section>
+    </>
   );
 }
