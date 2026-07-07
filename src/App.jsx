@@ -1,20 +1,20 @@
+import './index.css';
 import Navbar from './components/Navbar';
 import Marquee from './components/Marquee';
 import Hero from './components/Hero';
 import Stats from './components/Stats';
 import About from './components/About';
 import Services from './components/Services';
-import Expertise from './components/Expertise';
+import Sectors from './components/Sectors';
 import Process from './components/Process';
-import WhyUs from './components/WhyUs';
+import WhyChooseUs from './components/WhyChooseUs';
 import Testimonials from './components/Testimonials';
 import Gallery from './components/Gallery';
-import FollowUs from './components/FollowUs';
 import CTABand from './components/CTABand';
-import Contact from './components/Contact';
+import ContactMap from './components/ContactMap';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
-import FloatingWidget from './components/FloatingWidget';
+import QuickApply from './components/QuickApply';
 
 function App() {
   return (
@@ -26,18 +26,17 @@ function App() {
         <Stats />
         <About />
         <Services />
-        <Expertise />
+        <Sectors />
         <Process />
-        <WhyUs />
+        <WhyChooseUs />
         <Testimonials />
         <Gallery />
-        <FollowUs />
         <CTABand />
-        <Contact />
+        <ContactMap />
         <FAQ />
       </main>
       <Footer />
-      <FloatingWidget />
+      <QuickApply />
     </>
   );
 }

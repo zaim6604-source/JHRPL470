@@ -1,200 +1,381 @@
-import { useState } from 'react';
-import useInView from '../hooks/useInView';
+import { useEffect } from 'react';
+import {
+  MapPin,
+  Phone,
+  Navigation2,
+  ExternalLink,
+  Clock,
+} from 'lucide-react';
 
-const LAT = 33.61438252407208;
-const LNG = 73.00398272698568;
+const FacebookIcon = ({ size = 20, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} xmlns="http://www.w3.org/2000/svg">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+const contactItems = [
+  {
+    icon: MapPin,
+    label: 'Office Address',
+    value: 'Flat No. 11, 2nd Floor, Akram Complex, Model Town Link Road, Lahore, Punjab',
+    accent: '#0ea5e9',
+    bg: 'rgba(14,165,233,0.08)',
+    link: null,
+  },
+  {
+    icon: Phone,
+    label: 'Phone Numbers',
+    value: '042-5178464\n0300-9472963',
+    accent: '#fbbf24',
+    bg: 'rgba(251,191,36,0.08)',
+    link: 'tel:+924251784640',
+  },
+  {
+    icon: FacebookIcon,
+    label: 'Facebook Page',
+    value: 'barlex.agencies',
+    accent: '#0284c7',
+    bg: 'rgba(2,132,199,0.08)',
+    link: 'https://www.facebook.com/barlex.agencies/',
+  },
+  {
+    icon: Clock,
+    label: 'Office Hours',
+    value: 'Mon–Sat: 9:00 AM – 6:00 PM',
+    accent: '#0369a1',
+    bg: 'rgba(3,105,161,0.08)',
+    link: null,
+  },
+];
 
 export default function Contact() {
-  const [ref, inView] = useInView();
-  const [formType, setFormType] = useState('business');
-  const [form, setForm] = useState({ name: '', phone: '', email: '', company: '', message: '' });
-
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const text = `*Blue Real Eye Inquiry*\n\nName: ${form.name}\nPhone: ${form.phone}\nEmail: ${form.email}\n${formType === 'business' ? 'Company: ' : 'Interest: '}${form.company}\nMessage: ${form.message}`;
-    window.open(`https://wa.me/923115700584?text=${encodeURIComponent(text)}`, '_blank');
-  };
+  useEffect(() => {
+    const els = document.querySelectorAll('.ct-reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('show');
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <>
-      <style>{`
-        .ct-section{background:#fff;padding:96px 24px}
-        .ct-inner{max-width:1200px;margin:0 auto}
-        .ct-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-        @media(max-width:900px){.ct-layout{grid-template-columns:1fr}}
-        .ct-form-card{background:#FFF0F0;border-radius:20px;padding:32px;border:1px solid rgba(217,4,41,.06)}
-        .ct-toggle{display:flex;background:#fff;border-radius:12px;padding:4px;margin-bottom:24px;border:1px solid rgba(217,4,41,.08)}
-        .ct-toggle-btn{flex:1;padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px;font-family:"Plus Jakarta Sans",sans-serif;transition:all .2s}
-        .ct-toggle-btn.active{background:#D90429;color:#fff;box-shadow:0 4px 12px rgba(217,4,41,.2)}
-        .ct-toggle-btn:not(.active){background:transparent;color:#6B2025}
-        .ct-field{margin-bottom:16px}
-        .ct-field label{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6B2025;margin-bottom:6px}
-        .ct-field input,.ct-field textarea{width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(217,4,41,.1);background:#fff;font-size:14px;font-family:"Inter",sans-serif;color:#2E0507;transition:border-color .2s,box-shadow .2s;outline:none}
-        .ct-field input:focus,.ct-field textarea:focus{border-color:#D90429;box-shadow:0 0 0 3px rgba(217,4,41,.08)}
-        .ct-field textarea{resize:vertical;min-height:80px}
-        .ct-submit{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:12px;border:none;background:#FFD60A;color:#2E0507;font-weight:800;font-size:15px;font-family:"Plus Jakarta Sans",sans-serif;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(255,214,10,.3)}
-        .ct-submit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,214,10,.4)}
-        .ct-fallback{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
-        .ct-fallback a{font-size:13px;font-weight:600;color:#D90429;text-decoration:none;display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;background:rgba(217,4,41,.06);transition:background .2s}
-        .ct-fallback a:hover{background:rgba(217,4,41,.12)}
-        .ct-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-        @media(max-width:480px){.ct-info-grid{grid-template-columns:1fr}}
-        .ct-info-card{background:#FFF0F0;border:1px solid rgba(217,4,41,.06);border-radius:16px;padding:20px;transition:border-color .25s,transform .25s}
-        .ct-info-card:hover{border-color:rgba(217,4,41,.15);transform:translateY(-2px)}
-        .ct-info-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;background:rgba(217,4,41,.08);color:#D90429;font-size:16px}
-        .ct-info-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#D90429;margin-bottom:8px}
-        .ct-info-line{font-size:13px;color:#6B2025;line-height:1.65}
-        .ct-map{border-radius:20px;overflow:hidden;border:1px solid rgba(217,4,41,.06);box-shadow:0 4px 24px rgba(0,0,0,.04);position:relative}
-        .ct-map-badge{position:absolute;top:14px;left:14px;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;color:#2E0507;display:flex;align-items:center;gap:6px;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid rgba(217,4,41,.1)}
-      `}</style>
+    <section
+      id="contact"
+      style={{
+        padding: 'clamp(80px,10vw,130px) 24px',
+        background: '#f8fafc',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* BG decoration */}
+      <div
+        style={{
+          position: 'absolute',
+          top: -200,
+          left: -200,
+          width: 600,
+          height: 600,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(14,165,233,0.05), transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: -150,
+          right: -150,
+          width: 500,
+          height: 500,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(251,191,36,0.05), transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
-      <section id="contact" className="ct-section" ref={ref}>
-        <div className="ct-inner">
-          {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 60 }} className={`reveal${inView ? ' show' : ''}`}>
-            <div className="pill-badge">
-              <span className="pill-dot" />
-              Get in Touch
+      <div style={{ maxWidth: 1160, margin: '0 auto' }}>
+        {/* Header */}
+        <div
+          className="ct-reveal reveal"
+          style={{ textAlign: 'center', marginBottom: 64 }}
+        >
+          <span className="chip">Get In Touch</span>
+          <h2
+            style={{
+              fontFamily: 'Plus Jakarta Sans,sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(28px,5vw,46px)',
+              color: '#0f172a',
+              marginTop: 16,
+              marginBottom: 16,
+              letterSpacing: '-0.8px',
+            }}
+          >
+            Find <span className="grad-text">Us</span>
+          </h2>
+          <p
+            style={{
+              fontSize: 16,
+              color: '#64748b',
+              maxWidth: 520,
+              margin: '0 auto',
+              lineHeight: 1.7,
+              fontFamily: 'DM Sans,sans-serif',
+            }}
+          >
+            Visit our office in Lahore or reach out via phone or social media. Our team
+            is ready to guide your overseas career journey.
+          </p>
+        </div>
+
+        {/* Two-column layout */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%,460px),1fr))',
+            gap: 40,
+            alignItems: 'start',
+          }}
+        >
+          {/* Left – contact details */}
+          <div className="ct-reveal reveal-l">
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 16,
+                marginBottom: 32,
+              }}
+            >
+              {contactItems.map((item) => {
+                const Icon = item.icon;
+                const content = (
+                  <div
+                    key={item.label}
+                    style={{
+                      background: '#fff',
+                      border: '1px solid rgba(14,165,233,0.1)',
+                      borderRadius: 18,
+                      padding: '20px 22px',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 16,
+                      boxShadow: '0 4px 20px rgba(14,165,233,0.06)',
+                      transition: 'transform 0.25s, box-shadow 0.25s',
+                      cursor: item.link ? 'pointer' : 'default',
+                      textDecoration: 'none',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-3px)';
+                      e.currentTarget.style.boxShadow = '0 12px 36px rgba(14,165,233,0.12)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 20px rgba(14,165,233,0.06)';
+                    }}
+                  >
+                    <div
+                      style={{
+                        minWidth: 46,
+                        height: 46,
+                        borderRadius: 13,
+                        background: item.bg,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Icon size={20} color={item.accent} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          fontFamily: 'DM Sans,sans-serif',
+                          fontWeight: 600,
+                          color: '#94a3b8',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.08em',
+                          marginBottom: 4,
+                        }}
+                      >
+                        {item.label}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: 'DM Sans,sans-serif',
+                          fontWeight: 600,
+                          fontSize: 14.5,
+                          color: item.link ? item.accent : '#1e293b',
+                          lineHeight: 1.5,
+                          whiteSpace: 'pre-line',
+                        }}
+                      >
+                        {item.value}
+                        {item.link && (
+                          <ExternalLink
+                            size={12}
+                            style={{ marginLeft: 5, display: 'inline', verticalAlign: 'middle' }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+
+                return item.link ? (
+                  <a
+                    key={item.label}
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', display: 'block' }}
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <div key={item.label}>{content}</div>
+                );
+              })}
             </div>
-            <h2 style={{ fontFamily: '"Plus Jakarta Sans",sans-serif', fontWeight: 900, fontSize: 'clamp(30px,4vw,46px)', color: '#2E0507', marginBottom: 16 }}>
-              Contact <span style={{ color: '#D90429' }}>Us</span>
-            </h2>
-            <p style={{ color: '#6B2025', fontSize: 16, maxWidth: 540, margin: '0 auto', lineHeight: 1.7 }}>
-              Ready to strengthen your HR practices? Reach out and let's start the conversation.
-            </p>
+
+            {/* Direction button */}
+            <a
+              href="https://www.google.com/maps?q=31.4655,74.3151"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{ display: 'inline-flex', width: '100%', justifyContent: 'center' }}
+            >
+              <Navigation2 size={16} />
+              Get Directions on Google Maps
+            </a>
           </div>
 
-          <div className="ct-layout">
-            {/* Left: Form */}
-            <div className={`reveal-l${inView ? ' show' : ''}`}>
-              <div className="ct-form-card">
-                {/* Toggle */}
-                <div className="ct-toggle">
-                  <button
-                    className={`ct-toggle-btn ${formType === 'business' ? 'active' : ''}`}
-                    onClick={() => setFormType('business')}
-                  >
-                    <i className="fas fa-building" style={{ marginRight: 6 }} /> I'm a Business
-                  </button>
-                  <button
-                    className={`ct-toggle-btn ${formType === 'professional' ? 'active' : ''}`}
-                    onClick={() => setFormType('professional')}
-                  >
-                    <i className="fas fa-user" style={{ marginRight: 6 }} /> I'm a Professional
-                  </button>
-                </div>
-
-                <form onSubmit={handleSubmit}>
-                  <div className="ct-field">
-                    <label>Name</label>
-                    <input name="name" value={form.name} onChange={handleChange} placeholder="Your full name" required />
-                  </div>
-                  <div className="ct-field">
-                    <label>Phone</label>
-                    <input name="phone" value={form.phone} onChange={handleChange} placeholder="03XX-XXXXXXX" required />
-                  </div>
-                  <div className="ct-field">
-                    <label>Email</label>
-                    <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" />
-                  </div>
-                  <div className="ct-field">
-                    <label>{formType === 'business' ? 'Company / Role' : 'Interest Area'}</label>
-                    <input name="company" value={form.company} onChange={handleChange} placeholder={formType === 'business' ? 'Company name' : 'e.g., HR Consulting, Career Growth'} />
-                  </div>
-                  <div className="ct-field">
-                    <label>Message</label>
-                    <textarea name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your HR needs..." />
-                  </div>
-                  <button type="submit" className="ct-submit">
-                    <i className="fab fa-whatsapp" /> Send via WhatsApp
-                  </button>
-                </form>
-
-                <div className="ct-fallback">
-                  <a href="https://wa.me/923115700584" target="_blank" rel="noopener noreferrer">
-                    <i className="fab fa-whatsapp" /> WhatsApp Direct
-                  </a>
-                  <a href="mailto:Bluerealeyepak@gmail.com">
-                    <i className="far fa-envelope" /> Bluerealeyepak@gmail.com
-                  </a>
-                  <a href="mailto:info@bluerealeye.pk" style={{ opacity: 0.7 }}>
-                    <i className="far fa-envelope" /> info@bluerealeye.pk
-                  </a>
-                </div>
-              </div>
+          {/* Right – map */}
+          <div
+            className="ct-reveal reveal-r"
+            style={{
+              borderRadius: 24,
+              overflow: 'hidden',
+              boxShadow: '0 20px 60px rgba(14,165,233,0.12)',
+              border: '1px solid rgba(14,165,233,0.1)',
+            }}
+          >
+            <div
+              style={{
+                background: 'linear-gradient(135deg,#0ea5e9,#38bdf8)',
+                padding: '16px 22px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <MapPin size={16} color="rgba(255,255,255,0.8)" />
+              <span
+                style={{
+                  fontFamily: 'DM Sans,sans-serif',
+                  fontWeight: 600,
+                  fontSize: 13,
+                  color: 'rgba(255,255,255,0.9)',
+                }}
+              >
+                Barlex Agencies — Akram Complex, Model Town Link Road, Lahore
+              </span>
             </div>
-
-            {/* Right: Info + Map */}
-            <div className={`reveal-r${inView ? ' show' : ''}`} style={{ transitionDelay: '.15s' }}>
-              {/* Info grid */}
-              <div className="ct-info-grid">
-                <div className="ct-info-card">
-                  <div className="ct-info-icon"><i className="fab fa-whatsapp" /></div>
-                  <div className="ct-info-label">WhatsApp</div>
-                  <div className="ct-info-line">
-                    <a href="https://wa.me/923115700584" target="_blank" rel="noopener noreferrer" style={{ color: '#D90429', fontWeight: 600, textDecoration: 'none' }}>
-                      0311-5700584
-                    </a>
-                  </div>
-                </div>
-                <div className="ct-info-card">
-                  <div className="ct-info-icon"><i className="far fa-envelope" /></div>
-                  <div className="ct-info-label">Email</div>
-                  <div className="ct-info-line">
-                    <a href="mailto:Bluerealeyepak@gmail.com" style={{ color: '#D90429', fontWeight: 600, textDecoration: 'none' }}>
-                      Bluerealeyepak@gmail.com
-                    </a>
-                  </div>
-                </div>
-                <div className="ct-info-card" style={{ gridColumn: 'span 2' }}>
-                  <div className="ct-info-icon"><i className="fas fa-location-dot" /></div>
-                  <div className="ct-info-label">Address</div>
-                  <div className="ct-info-line">
-                    Al Noor Market, Ashiana Chowk,<br />Westridge III, Allahabad,<br />Rawalpindi, 46000
-                  </div>
-                </div>
-              </div>
-
-              {/* Social quick links */}
-              <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
-                {[
-                  { icon: 'fab fa-facebook-f', url: 'https://www.facebook.com/Bluerealeye', color: '#1877F2' },
-                  { icon: 'fab fa-instagram', url: 'https://www.instagram.com/bluerealeye', color: '#E4405F' },
-                  { icon: 'fab fa-youtube', url: 'https://www.youtube.com/@bluerealeyeinfo', color: '#FF0000' },
-                  { icon: 'fab fa-tiktok', url: 'https://www.tiktok.com/@Bluerealeyepak', color: '#000' },
-                ].map((s, i) => (
-                  <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
-                    style={{ width: 40, height: 40, borderRadius: 10, background: `${s.color}0d`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, fontSize: 16, textDecoration: 'none', transition: 'transform .2s' }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}>
-                    <i className={s.icon} />
-                  </a>
-                ))}
-              </div>
-
-              {/* Map */}
-              <div className="ct-map">
-                <div className="ct-map-badge">
-                  <i className="fas fa-location-dot" style={{ color: '#D90429', fontSize: 12 }} />
-                  Westridge III, Rawalpindi
-                </div>
-                <iframe
-                  title="Blue Real Eye Location"
-                  src={`https://maps.google.com/maps?q=${LAT},${LNG}&z=16&output=embed`}
-                  width="100%"
-                  height="480"
-                  style={{ display: 'block', border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-            </div>
+            <iframe
+              title="Barlex Agencies Location"
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3402.4!2d74.3151!3d31.4655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDI3JzU1LjgiTiA3NMKwMTgnNTQuNCJF!5e0!3m2!1sen!2spk!4v1"
+              width="100%"
+              height="420"
+              style={{ border: 0, display: 'block' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
-      </section>
-    </>
+
+        {/* Bottom coordinates strip */}
+        <div
+          className="ct-reveal reveal"
+          style={{
+            marginTop: 40,
+            background: '#fff',
+            border: '1px solid rgba(14,165,233,0.1)',
+            borderRadius: 16,
+            padding: '16px 24px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+            boxShadow: '0 4px 20px rgba(14,165,233,0.06)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Navigation2 size={15} color="#0ea5e9" />
+            <span
+              style={{
+                fontSize: 13,
+                fontFamily: 'DM Sans,sans-serif',
+                color: '#64748b',
+                fontWeight: 500,
+              }}
+            >
+              GPS Coordinates:
+            </span>
+            <span
+              style={{
+                fontSize: 13,
+                fontFamily: 'DM Sans,sans-serif',
+                fontWeight: 700,
+                color: '#0f172a',
+              }}
+            >
+              31.4655° N, 74.3151° E
+            </span>
+          </div>
+          <a
+            href="https://www.facebook.com/barlex.agencies/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 7,
+              fontSize: 13,
+              fontFamily: 'DM Sans,sans-serif',
+              fontWeight: 700,
+              color: '#0284c7',
+              textDecoration: 'none',
+              padding: '7px 14px',
+              borderRadius: 8,
+              background: 'rgba(2,132,199,0.06)',
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = 'rgba(2,132,199,0.12)')
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = 'rgba(2,132,199,0.06)')
+            }
+          >
+            <FacebookIcon size={14} color="currentColor" />
+            Follow on Facebook
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }

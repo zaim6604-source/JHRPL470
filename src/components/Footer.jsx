@@ -1,143 +1,136 @@
-const quickLinks = [
-  { l: 'Home', id: 'home' },
-  { l: 'About', id: 'about' },
-  { l: 'Services', id: 'services' },
-  { l: 'Expertise', id: 'expertise' },
-  { l: 'Process', id: 'process' },
-  { l: 'FAQs', id: 'faqs' },
-  { l: 'Contact', id: 'contact' },
+import { FaWhatsapp, FaMapMarkerAlt, FaPhone, FaArrowUp, FaHeart, FaFacebook } from 'react-icons/fa';
+
+const NAV_LINKS = [
+  { label: 'Home', href: '#home' },
+  { label: 'About', href: '#about' },
+  { label: 'Services', href: '#services' },
+  { label: 'Sectors', href: '#sectors' },
+  { label: 'Process', href: '#process' },
+  { label: 'FAQs', href: '#faqs' },
+  { label: 'Contact', href: '#contact' },
 ];
 
-const services = [
-  'HR Consulting',
-  'Employee & Labor Relations',
-  'Recruitment & Staffing',
-  'Payroll & Benefits',
-  'HR Policy & Compliance',
-  'Training & Development',
-  'Performance Management',
-  'Outsourced HR',
+const SERVICES = [
+  'Manpower Recruitment', 'Executive Search', 'Permanent Placement',
+  'Contract Staffing', 'Payroll Management', 'HR Consulting',
 ];
 
-const socials = [
-  { icon: 'fab fa-facebook-f', url: 'https://www.facebook.com/Bluerealeye', label: 'Facebook' },
-  { icon: 'fab fa-instagram', url: 'https://www.instagram.com/bluerealeye', label: 'Instagram' },
-  { icon: 'fab fa-youtube', url: 'https://www.youtube.com/@bluerealeyeinfo', label: 'YouTube' },
-  { icon: 'fab fa-tiktok', url: 'https://www.tiktok.com/@Bluerealeyepak', label: 'TikTok' },
+const SECTORS_LIST = [
+  'IT & Software', 'Banking & Finance', 'Oil & Gas',
+  'Construction', 'Healthcare', 'Manufacturing',
 ];
-
-const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export default function Footer() {
-  return (
-    <>
-      <style>{`
-        .ft{background:#BF0225;color:#fff}
-        .ft-body{max-width:1200px;margin:0 auto;padding:56px 24px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1.3fr;gap:40px}
-        @media(max-width:900px){.ft-body{grid-template-columns:1fr 1fr;gap:32px}}
-        @media(max-width:560px){.ft-body{grid-template-columns:1fr}}
-        .ft-col-title{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#FF6B6B;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-        .ft-col-title::before{content:'';width:20px;height:2px;border-radius:99px;background:#FFD60A}
-        .ft-link{display:block;color:rgba(255,255,255,.7);font-size:13px;margin-bottom:8px;cursor:pointer;background:none;border:none;text-align:left;padding:0;transition:color .2s;font-family:"Inter",sans-serif}
-        .ft-link:hover{color:#FFD60A}
-        .ft-addr{font-size:13px;line-height:1.8;color:rgba(255,255,255,.7);margin-bottom:16px}
-        .ft-logo-name{font-family:"Plus Jakarta Sans",sans-serif;font-weight:900;font-size:18px;color:#fff;line-height:1.2;margin-bottom:2px}
-        .ft-logo-sub{font-size:11px;font-weight:600;color:#FF6B6B;letter-spacing:.06em}
-        .ft-tagline{font-size:13px;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:20px}
-        .ft-phone{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.7);font-size:13px;text-decoration:none;margin-bottom:6px;transition:color .2s}
-        .ft-phone:hover{color:#FFD60A}
-        .ft-soc{display:flex;gap:10px;margin-top:16px}
-        .ft-soc-btn{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;color:rgba(255,255,255,.7);font-size:15px}
-        .ft-soc-btn:hover{background:#FFD60A;color:#2E0507;transform:translateY(-2px)}
-        .ft-bottom{border-top:1px solid rgba(255,255,255,.1);padding:20px 24px}
-        .ft-bottom-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-        .ft-bottom-copy{font-size:12px;color:rgba(255,255,255,.5)}
-      `}</style>
+  const scrollTo = (href) => {
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
-      <footer className="ft">
-        {/* Main body */}
-        <div className="ft-body">
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  return (
+    <footer className="relative overflow-hidden" style={{ background: '#AD1457' }}>
+      <div className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-5 bg-white -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-5 py-[clamp(48px,8vw,72px)]">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 10,
-                background: 'linear-gradient(135deg, #FFD60A, #FF6B6B)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0, boxShadow: '0 4px 12px rgba(255,214,10,.3)',
-              }}>
-                <i className="fas fa-eye" style={{ color: '#2E0507', fontSize: 18 }} />
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #C2185B, #E91E8C)' }}>
+                <span className="font-display font-extrabold text-white text-sm">JH</span>
               </div>
               <div>
-                <div className="ft-logo-name">Blue Real Eye</div>
-                <div className="ft-logo-sub">HR Consultants, Rawalpindi</div>
+                <div className="font-display font-extrabold text-base text-white">Juniper HR</div>
+                <div className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'rgba(255,210,63,0.7)' }}>Est. 1997 &bull; Islamabad</div>
               </div>
             </div>
-            <p className="ft-tagline">
-              Your trusted HR partner in Westridge, Rawalpindi — providing expert HR consulting, employee and labor relations, and staffing solutions for businesses and professionals.
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              Pakistan's trusted manpower recruitment agency, connecting employers with top talent since 1997.
             </p>
-            <div className="ft-soc">
-              {socials.map(s => (
-                <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="ft-soc-btn" aria-label={s.label}>
-                  <i className={s.icon} />
-                </a>
-              ))}
-            </div>
+            <a
+              href="https://wa.me/923003845414"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-semibold rounded-lg px-4 py-2 no-underline transition-colors"
+              style={{ color: '#FFD23F', background: 'rgba(255,210,63,0.1)' }}
+            >
+              <FaWhatsapp size={16} /> 0300-3845414
+            </a>
+            <a
+              href="https://www.facebook.com/juniperhumanresources/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-semibold rounded-lg px-4 py-2 no-underline transition-colors ml-2"
+              style={{ color: '#FFD23F', background: 'rgba(255,210,63,0.1)' }}
+            >
+              <FaFacebook size={16} /> Facebook
+            </a>
           </div>
 
-          {/* Quick links */}
+          {/* Quick Links */}
           <div>
-            <div className="ft-col-title">Quick Links</div>
-            {quickLinks.map(({ l, id }) => (
-              <button key={id} className="ft-link" onClick={() => go(id)}>{l}</button>
-            ))}
+            <h4 className="font-display font-bold text-sm uppercase tracking-wider mb-5" style={{ color: '#FFD23F' }}>Quick Links</h4>
+            <div className="flex flex-col gap-2.5">
+              {NAV_LINKS.map((l) => (
+                <button key={l.label} onClick={() => scrollTo(l.href)}
+                  className="bg-none border-none cursor-pointer text-left text-sm transition-colors p-0"
+                  style={{ color: 'rgba(255,255,255,0.5)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#FFD23F'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}>
+                  {l.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Services */}
           <div>
-            <div className="ft-col-title">Our Services</div>
-            {services.map(s => (
-              <button key={s} className="ft-link" onClick={() => go('services')}>{s}</button>
-            ))}
+            <h4 className="font-display font-bold text-sm uppercase tracking-wider mb-5" style={{ color: '#FFD23F' }}>Services</h4>
+            <div className="flex flex-col gap-2.5">
+              {SERVICES.map((s) => (
+                <span key={s} className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>{s}</span>
+              ))}
+            </div>
           </div>
 
-          {/* Contact */}
+          {/* Sectors + Contact */}
           <div>
-            <div className="ft-col-title">Contact Info</div>
-            <p className="ft-addr">
-              Al Noor Market, Ashiana Chowk<br />
-              Westridge III, Allahabad<br />
-              Rawalpindi, 46000
-            </p>
-            <a href="https://wa.me/923115700584" target="_blank" rel="noopener noreferrer" className="ft-phone">
-              <i className="fab fa-whatsapp" style={{ color: '#FFD60A', fontSize: 14 }} /> 0311-5700584
-            </a>
-            <a href="mailto:Bluerealeyepak@gmail.com" className="ft-phone">
-              <i className="far fa-envelope" style={{ color: '#FF6B6B', fontSize: 12 }} /> Bluerealeyepak@gmail.com
-            </a>
-            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {socials.map(s => (
-                <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: 12, color: 'rgba(255,255,255,.6)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, transition: 'color .2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#FFD60A'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,.6)'; }}>
-                  <i className={s.icon} style={{ fontSize: 11 }} /> {s.label}
-                </a>
+            <h4 className="font-display font-bold text-sm uppercase tracking-wider mb-5" style={{ color: '#FFD23F' }}>Sectors</h4>
+            <div className="flex flex-col gap-2.5 mb-6">
+              {SECTORS_LIST.map((s) => (
+                <span key={s} className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>{s}</span>
               ))}
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                <FaPhone size={12} /> 051-8895008
+              </div>
+              <div className="flex items-start gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                <FaMapMarkerAlt size={12} className="mt-0.5" />
+                <span>4th Floor, Juniper Tower, F-6 Markaz, Islamabad, 44220</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="ft-bottom">
-          <div className="ft-bottom-inner">
-            <span className="ft-bottom-copy">
-              &copy; {new Date().getFullYear()} Blue Real Eye. All rights reserved.
+        <div className="h-px mb-6" style={{ background: 'rgba(255,255,255,0.08)' }} />
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+            &copy; {new Date().getFullYear()} Juniper Human Resource Provider (Pvt) Ltd &mdash; All rights reserved
+          </p>
+          <div className="flex items-center gap-4">
+            <span className="text-xs flex items-center gap-1" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              Made with <FaHeart size={10} className="text-red-400" /> in Islamabad
             </span>
-            <span className="ft-bottom-copy">Westridge, Rawalpindi, Pakistan</span>
+            <button onClick={scrollToTop}
+              className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer transition-colors"
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <FaArrowUp size={13} style={{ color: 'rgba(255,255,255,0.5)' }} />
+            </button>
           </div>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 }

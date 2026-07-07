@@ -1,113 +1,50 @@
-import useInView from '../hooks/useInView';
+import useReveal from '../hooks/useReveal';
+import { FaSearch, FaUsers, FaUserCheck, FaHandshake, FaClipboardCheck, FaCogs, FaChartLine, FaShieldAlt } from 'react-icons/fa';
 
-const services = [
-  {
-    icon: 'fas fa-handshake',
-    title: 'HR Consulting',
-    desc: 'Strategic HR guidance for businesses of all sizes — from startup HR setup to organizational transformation.',
-    bg: '#D90429',
-  },
-  {
-    icon: 'fas fa-scale-balanced',
-    title: 'Employee & Labor Relations',
-    desc: 'Expert navigation of employee relations, labor law compliance, conflict resolution, and workplace mediation.',
-    bg: '#EF233C',
-  },
-  {
-    icon: 'fas fa-user-plus',
-    title: 'Recruitment & Staffing',
-    desc: 'End-to-end talent acquisition — sourcing, screening, interviewing, and onboarding the right candidates.',
-    bg: '#FF6B6B',
-  },
-  {
-    icon: 'fas fa-coins',
-    title: 'Payroll & Benefits Management',
-    desc: 'Accurate payroll processing, benefits administration, compensation planning, and payroll compliance.',
-    bg: '#FFD60A',
-  },
-  {
-    icon: 'fas fa-file-contract',
-    title: 'HR Policy & Compliance',
-    desc: 'Development of HR policies, employee handbooks, and compliance frameworks aligned with local labor laws.',
-    bg: '#BF0225',
-  },
-  {
-    icon: 'fas fa-chalkboard-user',
-    title: 'Training & Development',
-    desc: 'Customized training programs for leadership development, communication skills, compliance, and team building.',
-    bg: '#D90429',
-  },
-  {
-    icon: 'fas fa-chart-line',
-    title: 'Performance Management',
-    desc: 'Design and implementation of performance appraisal systems, KPIs, feedback processes, and improvement plans.',
-    bg: '#EF233C',
-  },
-  {
-    icon: 'fas fa-building',
-    title: 'Outsourced HR (HR-as-a-Service)',
-    desc: 'Comprehensive outsourced HR support for businesses without an in-house HR department — flexible and scalable.',
-    bg: '#FF6B6B',
-  },
+const SERVICES = [
+  { icon: FaSearch, title: 'Manpower Recruitment & Supply', desc: 'End-to-end recruitment solutions for organizations of all sizes.', color: '#C2185B' },
+  { icon: FaUsers, title: 'Executive Search & Headhunting', desc: 'Targeted headhunting for senior and specialist roles.', color: '#E91E8C' },
+  { icon: FaUserCheck, title: 'Permanent Placement', desc: 'Full-time placement services with rigorous candidate vetting.', color: '#7B68EE' },
+  { icon: FaHandshake, title: 'Temporary & Contract Staffing', desc: 'Flexible staffing solutions for project-based needs.', color: '#FFD23F' },
+  { icon: FaClipboardCheck, title: 'Payroll & Benefits Management', desc: 'Comprehensive payroll and benefits administration.', color: '#AD1457' },
+  { icon: FaCogs, title: 'HR Consulting & Outsourcing', desc: 'Strategic HR consulting and process outsourcing.', color: '#C2185B' },
+  { icon: FaChartLine, title: 'Candidate Screening & Assessment', desc: 'In-depth psychometric and skills-based assessments.', color: '#E91E8C' },
+  { icon: FaShieldAlt, title: 'Onboarding & Compliance', desc: 'Seamless onboarding aligned with regulatory compliance.', color: '#7B68EE' },
 ];
 
 export default function Services() {
-  const [ref, inView] = useInView();
+  useReveal('.svc-reveal');
 
   return (
-    <>
-      <style>{`
-        .sv-section{background:#FFF0F0;padding:96px 24px}
-        .sv-inner{max-width:1200px;margin:0 auto}
-        .sv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-        @media(max-width:1024px){.sv-grid{grid-template-columns:repeat(2,1fr)}}
-        @media(max-width:640px){.sv-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
-        .sv-card{border-radius:24px;padding:32px 28px;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
-        .sv-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,.12)}
-        .sv-card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;background:rgba(255,255,255,.25);font-size:22px;color:#fff}
-        .sv-card-title{font-family:"Plus Jakarta Sans",sans-serif;font-weight:800;font-size:18px;color:#fff;margin-bottom:10px}
-        .sv-card-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.85);flex:1}
-      `}</style>
+    <section id="services" className="py-[clamp(60px,10vw,100px)] px-5" style={{ background: '#FFF0F5' }}>
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12 svc-reveal reveal">
+          <span className="section-pill">OUR SERVICES</span>
+          <h2 className="font-display font-extrabold mt-4 mb-3" style={{ fontSize: 'clamp(28px,5vw,42px)', color: '#3A0A22' }}>
+            What We Offer
+          </h2>
+          <p className="text-sm md:text-base max-w-xl mx-auto leading-relaxed" style={{ color: '#6B5B3E' }}>
+            Comprehensive HR and recruitment solutions tailored to your business needs.
+          </p>
+        </div>
 
-      <section id="services" className="sv-section" ref={ref}>
-        <div className="sv-inner">
-          {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 60 }} className={`reveal${inView ? ' show' : ''}`}>
-            <div className="pill-badge">
-              <span className="pill-dot" />
-              Our Services
-            </div>
-            <h2 style={{ fontFamily: '"Plus Jakarta Sans",sans-serif', fontWeight: 900, fontSize: 'clamp(30px,4vw,46px)', color: '#2E0507', marginBottom: 16 }}>
-              Comprehensive <span style={{ color: '#D90429' }}>HR Solutions</span>
-            </h2>
-            <p style={{ color: '#6B2025', fontSize: 16, maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
-              From strategic consulting to day-to-day HR management — we provide the full spectrum of human resources services.
-            </p>
-          </div>
-
-          {/* Masonry-like grid */}
-          <div className="sv-grid">
-            {services.map((s, i) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+          {SERVICES.map((s, i) => {
+            const textColor = s.color === '#FFD23F' ? '#3A0A22' : '#fff';
+            return (
               <div
                 key={i}
-                className={`sv-card reveal${inView ? ' show' : ''}`}
-                style={{
-                  background: s.bg,
-                  transitionDelay: `${i * 0.08}s`,
-                  gridRow: i === 3 ? 'span 1' : 'auto',
-                  transform: i % 2 === 0 ? 'translateY(0)' : 'translateY(12px)',
-                }}
+                className="svc-reveal reveal rounded-2xl p-6 md:p-7 transition-all duration-300 hover:scale-[1.03]"
+                style={{ background: s.color, color: textColor }}
               >
-                <div className="sv-card-icon">
-                  <i className={s.icon} />
-                </div>
-                <div className="sv-card-title">{s.title}</div>
-                <div className="sv-card-desc">{s.desc}</div>
+                <s.icon size={26} className="mb-4 opacity-90" />
+                <h3 className="font-display font-bold text-base mb-2">{s.title}</h3>
+                <p className="text-sm leading-relaxed opacity-80">{s.desc}</p>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

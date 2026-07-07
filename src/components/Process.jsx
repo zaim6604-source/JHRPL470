@@ -1,83 +1,54 @@
-import useInView from '../hooks/useInView';
+import useReveal from '../hooks/useReveal';
+import { FaSearch, FaUserTie, FaClipboardList, FaHandshake, FaRocket } from 'react-icons/fa';
 
-const steps = [
-  { num: '01', title: 'Consultation & Assessment', desc: 'We start with a deep conversation to understand your HR needs, challenges, and goals.' },
-  { num: '02', title: 'HR Audit & Planning', desc: 'A thorough review of your current HR practices, policies, and compliance — followed by a strategic plan.' },
-  { num: '03', title: 'Solution Design', desc: 'We design tailored HR solutions — from recruitment frameworks to policy handbooks and training programs.' },
-  { num: '04', title: 'Implementation', desc: 'Our team works alongside yours to implement solutions smoothly, with minimal disruption.' },
-  { num: '05', title: 'Ongoing Support & Review', desc: 'Continuous support, periodic reviews, and adjustments to ensure your HR practices remain effective.' },
+const STEPS = [
+  { icon: FaSearch, title: 'Requirement Analysis', desc: 'Understand your staffing needs and role requirements.' },
+  { icon: FaUserTie, title: 'Sourcing & Screening', desc: 'Identify and pre-screen candidates from our extensive talent pool.' },
+  { icon: FaClipboardList, title: 'Shortlisting & Interviews', desc: 'Present top candidates and coordinate interviews.' },
+  { icon: FaHandshake, title: 'Selection & Offer', desc: 'Finalize selection, negotiate offers, and close placements.' },
+  { icon: FaRocket, title: 'Onboarding & Follow-up', desc: 'Ensure smooth onboarding with post-placement support.' },
 ];
 
+const COLORS = ['#C2185B', '#E91E8C', '#7B68EE', '#FFD23F', '#AD1457'];
+
 export default function Process() {
-  const [ref, inView] = useInView();
+  useReveal('.prc-reveal');
 
   return (
-    <>
-      <style>{`
-        .pr-section{padding:96px 24px;position:relative;overflow:hidden}
-        .pr-inner{max-width:1200px;margin:0 auto;position:relative;z-index:10}
-        .pr-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;align-items:start}
-        @media(max-width:1024px){.pr-steps{grid-template-columns:repeat(3,1fr);gap:16px}}
-        @media(max-width:640px){.pr-steps{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
-        .pr-step{text-align:center;padding:32px 16px;position:relative}
-        .pr-chevron{display:flex;align-items:center;position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:#FFD60A;font-size:20px;opacity:.9;z-index:5}
-        @media(max-width:1024px){.pr-chevron{display:none}}
-        .pr-step-num{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Plus Jakarta Sans",sans-serif;font-weight:900;font-size:20px;margin:0 auto 16px;box-shadow:0 4px 16px rgba(0,0,0,.15)}
-        .pr-step-title{font-family:"Plus Jakarta Sans",sans-serif;font-weight:800;font-size:15px;margin-bottom:8px;color:#fff}
-        .pr-step-desc{font-size:13px;line-height:1.6;color:rgba(255,255,255,.85)}
-      `}</style>
-
-      <section id="process" className="pr-section" ref={ref}>
-        {/* Diagonal background */}
-        <div className="section-diagonal" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(135deg, #D90429 0%, #EF233C 100%)',
-            transform: 'skewY(-2deg)',
-            transformOrigin: 'top left',
-            width: '100%', height: '120%', top: '-10%',
-          }} />
+    <section id="process" className="py-[clamp(60px,10vw,100px)] px-5 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #C2185B 0%, #7B68EE 100%)' }}>
+      <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      <div className="max-w-5xl mx-auto relative z-10">
+        <div className="text-center mb-12 prc-reveal reveal">
+          <span className="section-pill" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>HOW IT WORKS</span>
+          <h2 className="font-display font-extrabold mt-4 mb-3" style={{ fontSize: 'clamp(28px,5vw,42px)', color: '#fff' }}>
+            Our Process
+          </h2>
+          <p className="text-sm md:text-base max-w-xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            A streamlined recruitment journey from requirement to onboarding.
+          </p>
         </div>
 
-        {/* Wavy divider bottom */}
-        <div className="wave-divider" style={{ position: 'absolute', bottom: -1, left: 0, right: 0, zIndex: 5 }}>
-          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ width: '100%', height: '50px' }}>
-            <path d="M0,30 C360,0 720,60 1440,20 L1440,60 L0,60 Z" fill="#FFF0F0" />
-          </svg>
-        </div>
-
-        <div className="pr-inner">
-          <div style={{ textAlign: 'center', marginBottom: 48 }} className={`reveal${inView ? ' show' : ''}`}>
-            <div className="pill-badge" style={{ margin: '0 auto 18px', background: 'rgba(255,255,255,.15)', borderColor: 'rgba(255,255,255,.3)', color: '#fff' }}>
-              <span className="pill-dot" style={{ background: '#FFD60A' }} /> How It Works
-            </div>
-            <h2 style={{ fontFamily: '"Plus Jakarta Sans",sans-serif', fontWeight: 900, fontSize: 'clamp(28px,3.5vw,42px)', color: '#fff', marginBottom: 14 }}>
-              Our <span style={{ color: '#FFD60A' }}>Process</span>
-            </h2>
-            <p style={{ color: 'rgba(255,255,255,.8)', fontSize: 15, maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
-              A structured, proven approach to delivering HR solutions that make a real difference.
-            </p>
-          </div>
-
-          <div className="pr-steps">
-            {steps.map((p, i) => (
-              <div key={i} className={`pr-step reveal${inView ? ' show' : ''}`} style={{ transitionDelay: `${i * 0.1}s` }}>
-                {i < steps.length - 1 && (
-                  <div className="pr-chevron"><i className="fa-solid fa-chevron-right"></i></div>
-                )}
-                <div className="pr-step-num" style={{
-                  background: i % 2 === 0 ? '#FFD60A' : '#fff',
-                  color: i % 2 === 0 ? '#2E0507' : '#D90429',
-                }}>
-                  {p.num}
-                </div>
-                <div className="pr-step-title">{p.title}</div>
-                <div className="pr-step-desc">{p.desc}</div>
+        <div className="grid md:grid-cols-5 gap-6">
+          {STEPS.map((s, i) => (
+            <div key={i} className="prc-reveal reveal text-center" style={{ transitionDelay: `${i * 0.1}s` }}>
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"
+                style={{ background: COLORS[i] }}
+              >
+                <s.icon size={24} color={COLORS[i] === '#FFD23F' ? '#3A0A22' : '#fff'} />
               </div>
-            ))}
-          </div>
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-3 text-sm font-bold"
+                style={{ background: 'rgba(255,255,255,0.15)', color: '#FFD23F' }}
+              >
+                {i + 1}
+              </div>
+              <h3 className="font-display font-bold text-sm mb-1.5" style={{ color: '#fff' }}>{s.title}</h3>
+              <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>{s.desc}</p>
+            </div>
+          ))}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
