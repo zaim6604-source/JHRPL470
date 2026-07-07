@@ -1,47 +1,90 @@
-import useReveal from '../hooks/useReveal';
-import { FaPlane, FaSuitcase, FaPassport, FaBriefcase, FaHotel, FaUsers, FaFileAlt, FaShieldAlt } from 'react-icons/fa';
-
-const SERVICES = [
-  { icon: FaPlane, title: 'Air Ticketing', desc: 'Domestic & International flight bookings at the best rates.', color: '#F4A100' },
-  { icon: FaSuitcase, title: 'Tour Packages & Holidays', desc: 'Curated holiday packages for leisure and group travel.', color: '#FFC93C' },
-  { icon: FaPassport, title: 'Visit & Tourist Visa', desc: 'Hassle-free visa assistance for popular destinations.', color: '#E0144C' },
-  { icon: FaBriefcase, title: 'Work Visa & Overseas Placement', desc: 'End-to-end work visa processing and job placement abroad.', color: '#06A77D' },
-  { icon: FaHotel, title: 'Hotel & Hajj/Umrah Booking', desc: 'Hotel reservations and complete Hajj/Umrah packages.', color: '#D68C00' },
-  { icon: FaUsers, title: 'HR Consultancy & Manpower', desc: 'Skilled manpower recruitment and HR consultancy services.', color: '#F4A100' },
-  { icon: FaFileAlt, title: 'Document Attestation', desc: 'Professional document attestation and legalization services.', color: '#E0144C' },
-  { icon: FaShieldAlt, title: 'Travel Insurance & Support', desc: 'Comprehensive travel insurance and 24/7 support.', color: '#06A77D' },
-];
+import { useEffect, useRef } from 'react';
+import { site } from '../data/beaconData';
 
 export default function Services() {
-  useReveal('.svc-reveal');
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (e) => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('show'); }),
+      { threshold: 0.1 }
+    );
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section id="services" className="py-[clamp(60px,10vw,100px)] px-5" style={{ background: '#FFF6E0' }}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 svc-reveal reveal">
-          <span className="section-pill">WHAT WE DO</span>
-          <h2 className="font-display font-extrabold mt-4 mb-3" style={{ fontSize: 'clamp(28px,5vw,42px)', color: '#2A1A00' }}>
-            Our Services
-          </h2>
-          <p className="text-sm md:text-base max-w-xl mx-auto leading-relaxed" style={{ color: '#6B5B3E' }}>
-            Comprehensive travel, tourism, and HR solutions under one roof.
-          </p>
-        </div>
+    <>
+      <style>{`
+        .sv-section { background:var(--alt-section, #F0F8FF); padding:96px 24px; }
+        .sv-inner { max-width:1200px; margin:0 auto; }
+        .sv-title { font-weight:900; font-size:clamp(30px,4vw,46px); color:var(--ink, #062A45); margin-bottom:16px;font-family:'Poppins',sans-serif; }
+        .sv-honeycomb { display:flex;flex-wrap:wrap;justify-content:center;gap:20px; }
+        .sv-hex { width:270px;min-height:250px;padding:32px 24px;border-radius:20px;position:relative;cursor:pointer;transition:all .35s ease;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden; }
+        .sv-hex:hover { transform:translateY(-8px) scale(1.02);box-shadow:0 20px 48px rgba(0,0,0,.12); }
+        .sv-hex-icon { width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;flex-shrink:0; }
+        .sv-hex-title { font-weight:800;font-size:15px;margin-bottom:10px;font-family:'Poppins',sans-serif;line-height:1.3; }
+        .sv-hex-desc { font-size:13px;line-height:1.7;opacity:0;max-height:0;transition:all .35s ease; }
+        .sv-hex:hover .sv-hex-desc { opacity:1;max-height:120px; }
+        .sv-hex:hover .sv-hex-icon { transform:scale(1.1); }
+        @media(max-width:640px){ .sv-hex{width:100%;max-width:340px;min-height:auto;padding:24px 20px;} }
+      `}</style>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-          {SERVICES.map((s, i) => (
-            <div
-              key={i}
-              className="svc-reveal reveal rounded-2xl p-6 md:p-7 text-white transition-all duration-300 hover:scale-[1.03]"
-              style={{ background: s.color }}
-            >
-              <s.icon size={28} className="mb-4 opacity-90" />
-              <h3 className="font-display font-bold text-lg mb-2">{s.title}</h3>
-              <p className="text-sm leading-relaxed opacity-85">{s.desc}</p>
+      <section id="services" className="sv-section" ref={ref}>
+        <div className="sv-inner">
+
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 60 }} className="reveal">
+            <div className="section-pill" style={{margin:'0 auto 18px'}}>
+              <span className="pill-dot" />
+              OUR SERVICES
             </div>
-          ))}
+            <h2 className="sv-title">
+              Comprehensive{' '}
+              <span style={{color:'var(--color-primary, #0496FF)'}}>HR & Recruitment</span>
+            </h2>
+            <p style={{ color: 'var(--ink-light, #4A5E7A)', fontSize: 16, maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
+              From job placement to travel support — we cover every aspect of overseas employment with care and professionalism.
+            </p>
+          </div>
+
+          {/* Honeycomb grid */}
+          <div className="sv-honeycomb">
+            {site.services.map((s, i) => (
+              <div
+                key={i}
+                className="sv-hex reveal"
+                style={{ transitionDelay: `${(i % 4) * 0.08}s`, background: `${s.color}12`, border: `1.5px solid ${s.color}30` }}
+              >
+                <div className="sv-hex-icon" style={{ background: `${s.color}20`, color: s.color }}>
+                  <i className={s.icon}></i>
+                </div>
+                <div className="sv-hex-title" style={{ color: 'var(--ink, #062A45)' }}>{s.title}</div>
+                <div className="sv-hex-desc" style={{ color: 'var(--ink-light, #4A5E7A)' }}>{s.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div style={{ textAlign: 'center', marginTop: 56 }} className="reveal">
+            <a href={site.whatsappLink} target="_blank" rel="noopener noreferrer" style={{
+              display:'inline-flex',alignItems:'center',gap:10,
+              background:'var(--color-cta, #FB5607)',color:'#fff',
+              fontWeight:800,fontSize:15,padding:'14px 32px',
+              borderRadius:999,border:'none',cursor:'pointer',
+              textDecoration:'none',fontFamily:'Inter,sans-serif',
+              boxShadow:'0 4px 20px rgba(251,86,7,.35)',
+              transition:'transform .25s,box-shadow .25s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(251,86,7,.5)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
+            >
+              <i className="fa-brands fa-whatsapp"></i> Apply for Overseas Employment
+            </a>
+          </div>
+
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

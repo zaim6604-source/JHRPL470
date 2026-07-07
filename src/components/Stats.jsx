@@ -1,60 +1,44 @@
-import { useEffect, useState, useRef } from 'react';
-import { FaSmile, FaGlobeAsia, FaCalendarCheck, FaShieldAlt } from 'react-icons/fa';
-
-const STATS = [
-  { icon: FaSmile, label: 'Happy Travellers', value: 5000, suffix: '+' },
-  { icon: FaGlobeAsia, label: 'Destinations', value: 15, suffix: '+' },
-  { icon: FaCalendarCheck, label: 'Years of Service', value: 8, suffix: '+' },
-  { icon: FaShieldAlt, label: 'Trusted Clients', value: 2000, suffix: '+' },
-];
-
-function Counter({ end, suffix, duration = 2000 }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const counted = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !counted.current) {
-          counted.current = true;
-          const start = performance.now();
-          const step = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            setCount(Math.floor(progress * end));
-            if (progress < 1) requestAnimationFrame(step);
-          };
-          requestAnimationFrame(step);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [end, duration]);
-
-  return (
-    <span ref={ref} className="font-display font-extrabold text-3xl md:text-4xl text-white">
-      {count}{suffix}
-    </span>
-  );
-}
+import { useEffect, useRef } from 'react';
+import { site } from '../data/beaconData';
 
 export default function Stats() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (e) => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('show'); }),
+      { threshold: 0.3 }
+    );
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section className="py-10 md:py-14 px-5" style={{ background: '#F4A100' }}>
-      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-        {STATS.map((s, i) => (
-          <div key={i} className="text-center text-white">
-            <s.icon size={28} className="mx-auto mb-2 opacity-80" />
-            <Counter end={s.value} suffix={s.suffix} />
-            <div className="text-sm font-medium mt-1 opacity-85">{s.label}</div>
+    <>
+      <style>{`
+        .st-section { background:var(--color-primary, #0496FF);padding:48px 24px; }
+        .st-inner { max-width:1000px;margin:0 auto; }
+        .st-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:0; }
+        @media(max-width:640px){ .st-grid{grid-template-columns:repeat(2,1fr);gap:20px} }
+        .st-item { text-align:center;padding:0 16px; }
+        .st-item:not(:last-child) { border-right:1px solid rgba(255,255,255,.2); }
+        @media(max-width:640px){ .st-item:nth-child(2){border-right:none} .st-item:nth-child(3){border-right:1px solid rgba(255,255,255,.2)} }
+        .st-num { font-family:'Poppins',sans-serif;font-weight:900;font-size:clamp(28px,3.5vw,40px);color:var(--color-secondary, #5FB8FF);line-height:1;margin-bottom:4px; }
+        .st-label { font-size:13px;font-weight:600;color:rgba(255,255,255,.85);letter-spacing:.02em; }
+      `}</style>
+
+      <div className="st-section" ref={ref}>
+        <div className="st-inner">
+          <div className="st-grid reveal">
+            {site.stats.map((s, i) => (
+              <div key={i} className="st-item">
+                <div className="st-num">{s.n}</div>
+                <div className="st-label">{s.l}</div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
-    </section>
+    </>
   );
 }

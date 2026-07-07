@@ -1,72 +1,71 @@
-import useReveal from '../hooks/useReveal';
-import { FaComments, FaFileAlt, FaStethoscope, FaFileSignature, FaPlaneDeparture } from 'react-icons/fa';
-
-const STEPS = [
-  { num: 1, title: 'Enquire & Consult', desc: 'Contact us via WhatsApp or visit our Rawalpindi office for a free consultation.', icon: FaComments },
-  { num: 2, title: 'Choose Package/Job', desc: 'Select your tour package or desired job role and destination.', icon: FaFileAlt },
-  { num: 3, title: 'Documents & Visa', desc: 'Submit your documents. We handle attestation, application, and visa processing.', icon: FaFileSignature },
-  { num: 4, title: 'Booking/Confirmation', desc: 'Receive your confirmed bookings, tickets, or job offer.', icon: FaPlaneDeparture },
-  { num: 5, title: 'Travel & Support', desc: 'Pre-departure briefing, travel arrangements, and ongoing support.', icon: FaStethoscope },
-];
+import { useEffect, useRef } from 'react';
+import { site } from '../data/beaconData';
 
 export default function Process() {
-  useReveal('.pr-reveal');
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (e) => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('show'); }),
+      { threshold: 0.12 }
+    );
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section id="process" className="py-[clamp(60px,10vw,100px)] px-5 relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #F4A100 0%, #E0144C 100%)' }}>
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="pr-reveal reveal text-center mb-12">
-          <span className="section-pill" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', borderColor: 'rgba(255,255,255,0.3)' }}>
-            HOW IT WORKS
-          </span>
-          <h2 className="font-display font-extrabold mt-4 mb-3" style={{ fontSize: 'clamp(28px,5vw,42px)', color: '#fff' }}>
-            Our Process
-          </h2>
-          <p className="text-sm md:text-base max-w-xl mx-auto leading-relaxed text-white/80">
-            Simple steps from enquiry to departure.
-          </p>
+    <>
+      <style>{`
+        .pr-section { padding:96px 24px;position:relative;overflow:hidden; }
+        .pr-inner { max-width:1200px;margin:0 auto;position:relative;z-index:10; }
+        .pr-steps { display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;align-items:start; }
+        @media(max-width:1024px){ .pr-steps{grid-template-columns:repeat(3,1fr);gap:16px} }
+        @media(max-width:640px){ .pr-steps{grid-template-columns:1fr;max-width:400px;margin:0 auto} }
+        .pr-step { text-align:center;padding:32px 16px;position:relative; }
+        .pr-chevron { display:flex;align-items:center;position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--color-secondary, #5FB8FF);font-size:20px;opacity:.9;z-index:5; }
+        @media(max-width:1024px){ .pr-chevron{display:none} }
+        .pr-step-num { width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:900;font-size:20px;margin:0 auto 16px;box-shadow:0 4px 16px rgba(0,0,0,.15); }
+        .pr-step-title { font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;margin-bottom:8px; }
+        .pr-step-desc { font-size:13px;line-height:1.6;opacity:.85; }
+      `}</style>
+
+      <section id="process" className="pr-section" ref={ref}>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg, var(--color-primary, #0496FF) 0%, var(--color-cta, #FB5607) 100%)',transform:'skewY(-2deg)',transformOrigin:'top left',width:'100%',height:'120%',top:'-10%'}} />
+        <div style={{position:'absolute',bottom:-2,left:0,right:0,zIndex:5}}>
+          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{width:'100%',height:'60px'}}>
+            <path d="M0,30 C360,0 720,60 1440,20 L1440,60 L0,60 Z" fill="var(--color-background, #E8F5FF)"/>
+          </svg>
         </div>
 
-        {/* Desktop winding path */}
-        <div className="hidden md:grid grid-cols-5 gap-4">
-          {STEPS.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <div key={s.num} className="pr-reveal reveal flex flex-col items-center text-center" style={{ transitionDelay: `${i * 0.1}s` }}>
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4 relative z-10" style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.4)' }}>
-                  <Icon size={24} className="text-white" />
-                </div>
-                <div className="text-xs font-bold text-white/70 mb-2 tracking-wider">STEP {s.num}</div>
-                <h3 className="font-display font-bold text-sm text-white mb-2">{s.title}</h3>
-                <p className="text-xs leading-relaxed text-white/70">{s.desc}</p>
-                {i < STEPS.length - 1 && (
-                  <div className="w-full h-0.5 mt-4" style={{ background: 'rgba(255,255,255,0.2)' }} />
+        <div className="pr-inner">
+          <div style={{textAlign:'center',marginBottom:48}} className="reveal">
+            <div className="section-pill" style={{margin:'0 auto 18px',background:'rgba(255,255,255,.15)',borderColor:'rgba(255,255,255,.3)',color:'#fff'}}>
+              <span className="pill-dot" style={{background:'var(--color-secondary, #5FB8FF)'}} />HOW IT WORKS
+            </div>
+            <h2 style={{fontWeight:900,fontSize:'clamp(28px,3.5vw,42px)',color:'#fff',marginBottom:14,fontFamily:"'Poppins',sans-serif"}}>
+              Your Journey <span style={{color:'var(--color-secondary, #5FB8FF)'}}>Step by Step</span>
+            </h2>
+            <p style={{color:'rgba(255,255,255,.8)',fontSize:15,maxWidth:520,margin:'0 auto',lineHeight:1.7}}>
+              From your first call to your departure — we guide you through every stage with clarity and care.
+            </p>
+          </div>
+
+          <div className="pr-steps">
+            {site.process.map((p, i) => (
+              <div key={i} className="pr-step reveal" style={{transitionDelay:`${i*0.1}s`}}>
+                {i < site.process.length - 1 && (
+                  <div className="pr-chevron"><i className="fa-solid fa-chevron-right"></i></div>
                 )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Mobile stacked */}
-        <div className="md:hidden flex flex-col gap-4">
-          {STEPS.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <div key={s.num} className="pr-reveal reveal flex items-start gap-4" style={{ transitionDelay: `${i * 0.1}s` }}>
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 mt-1" style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.4)' }}>
-                  <Icon size={18} className="text-white" />
+                <div className="pr-step-num" style={{background:i%2===0?'var(--color-secondary, #5FB8FF)':'#fff',color:i%2===0?'var(--ink, #062A45)':'var(--color-primary, #0496FF)'}}>
+                  {p.num}
                 </div>
-                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: '14px 16px', flex: 1 }}>
-                  <div className="text-[10px] font-bold text-white/60 mb-1 tracking-wider">STEP {s.num}</div>
-                  <h3 className="font-display font-bold text-base text-white mb-1">{s.title}</h3>
-                  <p className="text-xs leading-relaxed text-white/70">{s.desc}</p>
-                </div>
+                <div className="pr-step-title" style={{color:'#fff'}}>{p.title}</div>
+                <div className="pr-step-desc" style={{color:'rgba(255,255,255,.8)'}}>{p.desc}</div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

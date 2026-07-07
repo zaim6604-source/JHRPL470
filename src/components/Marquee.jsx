@@ -1,34 +1,29 @@
-import { FaPlane, FaSuitcase, FaPassport, FaUserTie } from 'react-icons/fa';
-
-const ITEMS = [
-  { icon: FaPlane, label: 'Air Tickets' },
-  { icon: FaSuitcase, label: 'Tour Packages' },
-  { icon: FaPassport, label: 'Visa Services' },
-  { icon: FaUserTie, label: 'HR Consultancy' },
-];
+import { site } from '../data/beaconData';
 
 export default function Marquee() {
-  const content = (
-    <div className="flex items-center gap-8 whitespace-nowrap">
-      {ITEMS.map((item, i) => (
-        <span key={i} className="flex items-center gap-2 text-sm md:text-base font-semibold">
-          <item.icon size={14} />
-          {item.label}
-          <span className="w-1.5 h-1.5 rounded-full bg-white/40 mx-2" />
-        </span>
-      ))}
-      <span className="flex items-center gap-2 text-sm md:text-base font-medium opacity-80">
-        📍 Mid City Mall, Rawalpindi
-      </span>
-    </div>
-  );
-
   return (
-    <div className="relative top-16 md:top-20 overflow-hidden" style={{ background: '#F4A100' }}>
-      <div className="flex py-2.5 text-white">
-        <div className="flex animate-marquee">{content}</div>
-        <div className="flex animate-marquee">{content}</div>
+    <>
+      <style>{`
+        .mq-wrap { background:var(--color-primary, #0496FF);padding:10px 0;overflow:hidden; }
+        .mq-track { display:flex;gap:0;animation:marquee 28s linear infinite;width:max-content; }
+        .mq-track:hover { animation-play-state:paused; }
+        .mq-item { display:inline-flex;align-items:center;gap:10px;padding:0 24px;white-space:nowrap;font-size:13px;font-weight:700;color:#fff;letter-spacing:.03em;font-family:'Inter',sans-serif; }
+        .mq-dot { width:5px;height:5px;border-radius:50%;background:var(--color-secondary, #5FB8FF);flex-shrink:0; }
+      `}</style>
+      <div className="mq-wrap" style={{ marginTop: 80 }}>
+        <div className="mq-track">
+          {[...Array(3)].map((_, idx) => (
+            <div key={idx} style={{display:'flex'}}>
+              {site.marquee.map((item, i) => (
+                <span key={i} className="mq-item">
+                  <span className="mq-dot" />
+                  {item}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

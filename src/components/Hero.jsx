@@ -1,75 +1,94 @@
-import { useState } from 'react';
-import useReveal from '../hooks/useReveal';
-import { FaWhatsapp, FaPlane, FaGlobeAsia, FaUserTie } from 'react-icons/fa';
-
-const WA = '923455487713';
+import { useEffect, useRef } from 'react';
+import { site } from '../data/beaconData';
 
 export default function Hero() {
-  useReveal('.hero-reveal');
-  const [heroErr, setHeroErr] = useState(false);
-  const [officeErr, setOfficeErr] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ref.current?.querySelectorAll('.h-reveal').forEach((el, i) => {
+        setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, i * 140);
+      });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <section id="hero" className="pt-32 md:pt-40 pb-16 md:pb-20 px-5 relative overflow-hidden" style={{ background: '#FFF6E0' }}>
-      <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10 -translate-y-1/2 translate-x-1/2" style={{ background: '#F4A100' }} />
-      <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-10 translate-y-1/2 -translate-x-1/2" style={{ background: '#E0144C' }} />
+    <>
+      <style>{`
+        .h-reveal { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+        .h-badge { display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 18px;border-radius:999px; }
+        .h-badge-dot { width:7px;height:7px;border-radius:50%;background:var(--color-accent, #FFBE0B);box-shadow:0 0 8px rgba(255,190,11,.5);animation:hPing 1.8s ease infinite; }
+        @keyframes hPing { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.6);opacity:.4} }
+        .h-stat-bar { display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.2);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.1); }
+        @media(max-width:640px) { .h-stat-bar{grid-template-columns:repeat(2,1fr)} }
+        .h-stat { padding:22px 16px;text-align:center;border-right:1px solid rgba(0,0,0,.06); }
+        .h-stat:last-child { border-right:none; }
+        @media(max-width:640px){ .h-stat:nth-child(2){border-right:none} .h-stat:nth-child(3){border-right:1px solid rgba(0,0,0,.06)} }
+        .h-stat-n { font-weight:900;font-family:'Poppins',sans-serif;font-size:clamp(22px,3vw,28px);color:var(--color-primary, #0496FF);text-shadow:0 0 20px rgba(4,150,255,.2); }
+        .h-stat-l { font-size:12px;font-weight:500;color:var(--ink-light, #4A5E7A);margin-top:3px; }
+        .h-btn-primary { display:inline-flex;align-items:center;gap:8px;background:var(--color-cta, #FB5607);color:#fff;font-weight:800;font-size:16px;padding:15px 32px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(251,86,7,.4);transition:transform .25s,box-shadow .25s;text-decoration:none;font-family:'Inter',sans-serif; }
+        .h-btn-primary:hover { transform:translateY(-2px);box-shadow:0 8px 30px rgba(251,86,7,.5); }
+        .h-btn-outline { display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;font-weight:700;font-size:16px;padding:13px 30px;border-radius:12px;border:2px solid rgba(255,255,255,.5);cursor:pointer;transition:background .25s,border-color .25s,transform .25s;text-decoration:none;font-family:'Inter',sans-serif; }
+        .h-btn-outline:hover { background:rgba(255,255,255,.1);border-color:#fff;transform:translateY(-2px); }
+      `}</style>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[140px] md:auto-rows-[180px]">
-          {/* Headline Tile */}
-          <div className="col-span-2 row-span-2 rounded-2xl p-5 md:p-8 flex flex-col justify-center hero-reveal reveal" style={{ background: 'linear-gradient(135deg, #F4A100 0%, #FFC93C 100%)' }}>
-            <span className="text-white/80 text-xs font-semibold uppercase tracking-widest mb-2">Rimsha Travels</span>
-            <h1 className="font-display font-extrabold text-white leading-tight mb-3" style={{ fontSize: 'clamp(24px, 4vw, 44px)' }}>
-              Your Journeys and Careers,<br />Expertly Arranged
-            </h1>
-            <p className="text-white/90 text-sm md:text-base max-w-lg leading-relaxed">
-              Rimsha Travels handles tickets, tours, and visas — and connects skilled workers to opportunities abroad, all under one licensed roof.
-            </p>
+      <section id="home" ref={ref} style={{
+        position: 'relative', minHeight: '100vh',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        overflow: 'hidden', padding: '120px 24px 40px',
+      }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+          <img
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=90&auto=format&fit=crop"
+            alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }}
+          />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(4,150,255,.85) 0%, rgba(255,190,11,.7) 100%)' }} />
+        </div>
+
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 820, width: '100%', textAlign: 'center' }}>
+          <div className="h-badge h-reveal" style={{ marginBottom: 28, display: 'inline-flex' }}>
+            <span className="h-badge-dot" />
+            Govt. Licensed OEP &mdash; License No. [Add License]
           </div>
 
-          {/* Hero Image */}
-          <div className="col-span-1 row-span-2 rounded-2xl overflow-hidden relative hero-reveal reveal-l">
-            {!heroErr ? (
-              <img src="/images/hero.jpg" alt="Travel" className="w-full h-full object-cover" onError={() => setHeroErr(true)} />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center" style={{ background: '#FFC93C' }}>
-                <FaPlane size={48} className="text-white/60" />
-              </div>
-            )}
-          </div>
+          <h1 className="h-reveal" style={{
+            fontWeight: 900, fontFamily: "'Poppins', sans-serif",
+            fontSize: 'clamp(38px,6.5vw,74px)',
+            color: '#fff', lineHeight: 1.08, marginBottom: 20,
+            transitionDelay: '.1s',
+          }}>
+            {site.headline}
+          </h1>
 
-          {/* CTA Tile */}
-          <div className="col-span-1 row-span-1 rounded-2xl flex flex-col items-center justify-center hero-reveal reveal cursor-pointer transition-transform hover:scale-[1.02]" style={{ background: '#06A77D' }}>
-            <a href={`https://wa.me/${WA}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center w-full h-full no-underline text-white">
-              <FaWhatsapp size={28} className="mb-1" />
-              <span className="font-display font-bold text-sm">Chat Now</span>
-              <span className="text-[10px] text-white/70">0345-5487713</span>
+          <p className="h-reveal" style={{
+            fontSize: 'clamp(15px,1.8vw,19px)', color: 'rgba(255,255,255,.9)',
+            lineHeight: 1.7, maxWidth: 650, margin: '0 auto 12px',
+            transitionDelay: '.2s',
+          }}>
+            {site.subheadline}
+          </p>
+
+          <div className="h-reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center', marginBottom: 60, transitionDelay: '.38s' }}>
+            <a href={site.whatsappLink} target="_blank" rel="noopener noreferrer" className="h-btn-primary">
+              <i className="fa-brands fa-whatsapp"></i> Apply Now
+            </a>
+            <a href={site.whatsappLink} target="_blank" rel="noopener noreferrer" className="h-btn-outline">
+              <i className="fa-brands fa-whatsapp"></i> Chat on WhatsApp
             </a>
           </div>
 
-          {/* Badge Tile */}
-          <div className="col-span-1 row-span-1 rounded-2xl flex items-center justify-center gap-2 hero-reveal reveal-r" style={{ background: '#E0144C' }}>
-            <div className="text-center text-white">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <FaGlobeAsia size={16} />
-                <FaUserTie size={16} />
+          <div className="h-stat-bar h-reveal" style={{ transitionDelay: '.5s' }}>
+            {site.stats.map((s, i) => (
+              <div key={i} className="h-stat">
+                <div className="h-stat-n">{s.n}</div>
+                <div className="h-stat-l">{s.l}</div>
               </div>
-              <span className="font-display font-bold text-xs md:text-sm">Travel &bull; Tourism &bull; HR</span>
-            </div>
-          </div>
-
-          {/* Office Image */}
-          <div className="col-span-1 row-span-1 rounded-2xl overflow-hidden relative hero-reveal reveal">
-            {!officeErr ? (
-              <img src="/images/office.jpg" alt="Office" className="w-full h-full object-cover" onError={() => setOfficeErr(true)} />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center" style={{ background: '#FFF6E0' }}>
-                <span className="text-xs text-[#D68C00]">Office</span>
-              </div>
-            )}
+            ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

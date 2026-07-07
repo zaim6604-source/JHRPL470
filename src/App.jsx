@@ -1,40 +1,43 @@
-import './index.css';
 import Navbar from './components/Navbar';
 import Marquee from './components/Marquee';
 import Hero from './components/Hero';
 import Stats from './components/Stats';
-import Services from './components/Services';
-import About from './components/About';
-import Destinations from './components/Destinations';
 import Process from './components/Process';
+import About from './components/About';
+import Services from './components/Services';
+import Countries from './components/Countries';
 import Testimonials from './components/Testimonials';
-import Gallery from './components/Gallery';
 import CTABand from './components/CTABand';
-import ContactMap from './components/ContactMap';
-import FAQ from './components/FAQ';
+import Contact from './components/Contact';
 import Footer from './components/Footer';
-import QuickApply from './components/QuickApply';
 
 function App() {
   return (
     <>
       <Navbar />
-      <Marquee />
       <main>
+        {/* 1. Hero */}
         <Hero />
+        {/* 2. Marquee */}
+        <Marquee />
+        {/* 3. Stat Band */}
         <Stats />
-        <Services />
-        <About />
-        <Destinations />
+        {/* 4. How It Works */}
         <Process />
+        {/* 5. About */}
+        <About />
+        {/* 6. Services */}
+        <Services />
+        {/* 7. Countries */}
+        <Countries />
+        {/* 8. Testimonials + Gallery */}
         <Testimonials />
-        <Gallery />
+        {/* 9. CTA Band */}
         <CTABand />
-        <ContactMap />
-        <FAQ />
+        {/* 10. Contact + Map + FAQs */}
+        <Contact />
       </main>
       <Footer />
-      <QuickApply />
     </>
   );
 }
