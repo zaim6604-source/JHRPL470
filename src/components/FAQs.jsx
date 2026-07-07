@@ -1,64 +1,70 @@
-import { useState, useRef } from "react";
+import { useState } from 'react';
+import SectionHeader from './SectionHeader';
+import { useEffect, useRef } from 'react';
 
 const faqs = [
   {
-    q: "Which trades can I get tested for?",
-    a: "We offer testing across 20+ trades including Welder (3G/6G), Electrician, Plumber, Mason, Steel Fixer, Shuttering Carpenter, HVAC/AC Technician, Heavy & Light Driver, Auto Mechanic, Pipe Fitter, Painter, and Duct Man.",
+    q: 'Where are you located?',
+    a: 'I am based in Cheena Kalay, Buner, KPK, Pakistan. You can reach me via WhatsApp or visit the area to connect in person.',
   },
   {
-    q: "How do I book a trade test?",
-    a: "Contact us via WhatsApp at 0300-5719948. Tell us your trade and preferred date, and we'll schedule your test at our Mardan center.",
+    q: 'Which countries do you recruit for?',
+    a: 'I recruit for Saudi Arabia, UAE, Qatar, Oman (Muscat), Kuwait, Malaysia (KL), Germany, Romania, Greece, and other countries. Contact me for the latest openings.',
   },
   {
-    q: "How long does the test take?",
-    a: "Most practical tests take 30–60 minutes depending on the trade. Results and certificates are typically issued the same day.",
+    q: 'What documents do I need?',
+    a: 'You typically need your CNIC, passport (valid), educational certificates, experience letters, and passport-sized photographs. I will guide you through exact requirements.',
   },
   {
-    q: "Is the certificate internationally recognised?",
-    a: "Our trade test certificates are recognised by overseas employers and recruitment agencies. We also provide video and photo records of your test.",
+    q: 'How long does the process take?',
+    a: 'Processing time varies by country and position, typically 2 to 8 weeks. I strive to make the process as efficient as possible.',
   },
   {
-    q: "Where is the testing center located?",
-    a: "Our facility is at 5XQ2+94P, Mardan, 23200, KPK. You can find us on Google Maps using the Plus Code.",
+    q: 'Do you charge any fees?',
+    a: 'Any applicable fees are communicated upfront. I believe in complete transparency. Contact me for details based on your desired country and job role.',
   },
   {
-    q: "What documents should I bring?",
-    a: "Bring your CNIC, passport-sized photos, and any relevant tools of your trade. If you have previous certificates, bring those as well.",
+    q: 'How do I contact you?',
+    a: 'The best way is via WhatsApp at 0334-5577225. You can also use the enquiry form on this site and I will get back to you.',
   },
 ];
 
-export default function FAQs() {
+export default function Faqs() {
+  const ref = useRef(null);
   const [openIndex, setOpenIndex] = useState(null);
-  const contentRefs = useRef([]);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section id="faqs" className="py-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-center mb-14">
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-primary/10 text-primary border border-primary/20">
-            FAQS
-          </span>
+    <section className="py-24 relative overflow-hidden" style={{ background: 'var(--color-background)' }} ref={ref}>
+      <div className="max-w-[800px] mx-auto px-6 relative z-10">
+        <div className="reveal">
+          <SectionHeader tag="FAQs" title="Frequently Asked Questions" />
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-3">
+        <div className="reveal flex flex-col gap-3">
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i;
             return (
-              <div key={i} className="bg-white rounded-xl border border-primary/10 overflow-hidden shadow-sm">
+              <div key={i}
+                className="rounded-xl overflow-hidden bg-white transition-all"
+                style={{ border: `1px solid ${isOpen ? 'var(--color-primary)' : 'rgba(196,69,105,0.1)'}` }}>
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="w-full flex items-center justify-between p-5 text-left"
-                  aria-expanded={isOpen}
-                >
-                  <span className="font-medium text-sm sm:text-base text-ink pr-4">{faq.q}</span>
-                  <i className={`fas fa-chevron-down text-primary transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}></i>
+                  className="w-full flex items-center justify-between px-6 py-4 text-left text-sm font-semibold transition-all"
+                  style={{ color: isOpen ? 'var(--color-primary)' : 'var(--color-ink)' }}>
+                  <span className="pr-4">{faq.q}</span>
+                  <i className={`fas fa-chevron-down text-xs transition-all duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                    style={{ color: 'var(--color-primary)' }} />
                 </button>
-                <div
-                  ref={(el) => (contentRefs.current[i] = el)}
-                  className="overflow-hidden transition-all duration-300"
-                  style={{ maxHeight: isOpen ? contentRefs.current[i]?.scrollHeight + "px" : "0" }}
-                >
-                  <p className="px-5 pb-5 text-sm text-ink/70 leading-relaxed">{faq.a}</p>
+                <div className={`px-6 transition-all duration-300 overflow-hidden ${isOpen ? 'pb-5 max-h-96' : 'max-h-0 pb-0'}`}>
+                  <p className="text-sm leading-relaxed" style={{ color: '#666' }}>{faq.a}</p>
                 </div>
               </div>
             );

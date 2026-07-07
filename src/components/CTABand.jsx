@@ -1,36 +1,50 @@
-export default function CTABand() {
-  return (
-    <section className="py-20 bg-gradient-to-br from-primary via-primary to-secondary relative overflow-hidden">
-      <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/5"></div>
-      <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-cta/10"></div>
+import { useEffect, useRef } from 'react';
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white mb-4">
-          Ready to Get Certified?
-        </h2>
-        <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
-          Book your trade test today at Bukhari Trade Test Center and get certified for overseas
-          employment.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <a
-            href="https://wa.me/923005719948"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-cta text-ink px-8 py-3.5 rounded-lg text-base font-bold hover:bg-cta/90 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2"
-          >
-            <i className="fas fa-paper-plane"></i>
-            Book Your Trade Test
-          </a>
-          <a
-            href="https://wa.me/923005719948"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-white/15 text-white border border-white/30 px-8 py-3.5 rounded-lg text-base font-bold hover:bg-white/25 transition-all inline-flex items-center gap-2"
-          >
-            <i className="fab fa-whatsapp"></i>
-            WhatsApp Us
-          </a>
+export default function CtaBand() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section className="relative py-20 overflow-hidden" ref={ref}
+      style={{ background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)' }}>
+      <div className="absolute top-0 left-0 right-0 h-1" style={{ background: 'var(--color-cta)' }} />
+
+      <div className="absolute inset-0" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)',
+        backgroundSize: '32px 32px',
+      }} />
+
+      <div className="relative z-10 max-w-[700px] mx-auto px-6 text-center">
+        <div className="reveal">
+          <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-4">
+            Ready to Work Abroad?
+          </h2>
+          <p className="text-lg text-white/80 mb-8">
+            Take the first step. Reach out on WhatsApp and let me help you find the right opportunity.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <a
+              href="https://wa.me/923345577225"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full font-bold text-[0.95rem] transition-all duration-200 shadow-lg hover:scale-105 btn-amber"
+              style={{ background: 'var(--color-cta)', color: 'var(--color-ink)' }}>
+              <i className="fab fa-whatsapp text-lg" /> Apply Now
+            </a>
+            <a
+              href="https://wa.me/923345577225"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-white/40 text-white font-semibold text-[0.95rem] hover:bg-white/10 hover:border-white/70 transition-all duration-200">
+              <i className="fab fa-whatsapp" /> WhatsApp Me
+            </a>
+          </div>
         </div>
       </div>
     </section>

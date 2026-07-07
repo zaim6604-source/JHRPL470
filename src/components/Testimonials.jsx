@@ -1,95 +1,86 @@
-import { useState } from "react";
+import { useEffect, useRef } from 'react';
+import SectionHeader from './SectionHeader';
 
 const testimonials = [
   {
-    name: "Bilal Khan",
-    role: "Welder — Saudi Arabia",
-    quote: "I took my 3G welding test at Bukhari Trade Test Center. The assessors were professional and the setup was just like what I'd face on a real site. Got my certificate the same day.",
+    name: 'Sohail Khan',
+    location: 'Saudi Arabia',
+    role: 'Heavy Driver',
+    text: 'Zahid helped me get a driving job in Dammam. From paperwork to the flight booking, he handled everything. I am now earning well and supporting my family back in Buner. Highly recommend!',
     rating: 5,
+    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
   },
   {
-    name: "Faisal Ali",
-    role: "Electrician — Qatar",
-    quote: "The practical test was fair and thorough. They tested my wiring, panel work, and troubleshooting skills. The video record helped my employer verify my skills without a second interview.",
+    name: 'Rashid Ahmad',
+    location: 'UAE',
+    role: 'Construction Worker',
+    text: 'I was unsure about going abroad but Zahid guided me through the entire process. The employer was verified and the job was exactly what was promised. Great service!',
     rating: 5,
+    img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
   },
   {
-    name: "Waqar Ahmad",
-    role: "Heavy Driver — UAE",
-    quote: "Bukhari Center made the testing process easy. They tested my driving and basic mechanical knowledge. The certificate was accepted by my sponsor without any issues.",
+    name: 'Naveed Ali',
+    location: 'Qatar',
+    role: 'Sales Assistant',
+    text: 'Thanks to Zahid, I found a job in Doha within weeks. Everything was transparent and he kept me updated at every step. A trustworthy agent from our own area.',
     rating: 5,
-  },
-  {
-    name: "Rashid Mehmood",
-    role: "Plumber — Germany",
-    quote: "The test was hands-on and practical — pipe threading, joint work, and pressure testing. I appreciated the detailed grading report. Highly recommended for anyone going abroad.",
-    rating: 4,
-  },
-  {
-    name: "Naveed Iqbal",
-    role: "Steel Fixer — Kuwait",
-    quote: "They tested my rebar tying, cutting, and bending skills just like on a real construction site. Fair assessment and quick results. Great facility in Mardan.",
-    rating: 5,
+    img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80',
   },
 ];
 
 export default function Testimonials() {
-  const [active, setActive] = useState(0);
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <section id="testimonials" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-center mb-14">
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-primary/10 text-primary border border-primary/20">
-            WHAT WORKERS SAY
-          </span>
+    <section className="py-24 relative overflow-hidden bg-white" ref={ref}>
+      <div className="blob blob-mulberry hidden lg:block" style={{ width: 300, height: 300, top: '5%', left: '-5%', opacity: 0.08 }} />
+      <div className="blob blob-blue hidden lg:block" style={{ width: 250, height: 250, bottom: '5%', right: '-5%', opacity: 0.08 }} />
+
+      <div className="max-w-[1180px] mx-auto px-6 relative z-10">
+        <div className="reveal">
+          <SectionHeader tag="SUCCESS STORIES" title="What People Say" />
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          {/* Chat bubble thread */}
-          <div className="flex flex-col gap-5">
-            {testimonials.map((t, i) => {
-              const isLeft = i % 2 === 0;
-              return (
-                <div
-                  key={i}
-                  className={`flex ${isLeft ? "justify-start" : "justify-end"} animate-chat-pop`}
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                >
-                  <div
-                    className={`relative max-w-lg ${
-                      isLeft
-                        ? "bg-background border border-primary/10"
-                        : "bg-primary/5 border border-primary/10"
-                    } rounded-2xl p-4 shadow-sm`}
-                  >
-                    <div className="flex items-center gap-1 mb-2">
-                      {[...Array(5)].map((_, s) => (
-                        <i
-                          key={s}
-                          className={`fas fa-star text-[10px] ${s < t.rating ? "text-cta" : "text-gray-200"}`}
-                        ></i>
-                      ))}
-                    </div>
-                    <p className="text-sm text-ink/80 leading-relaxed mb-2">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center">
-                        <span className="text-[10px] font-bold text-primary">
-                          {t.name.split(" ").map((n) => n[0]).join("")}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-ink">{t.name}</p>
-                        <p className="text-[10px] text-ink/40">{t.role}</p>
-                      </div>
-                    </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {testimonials.map((t, i) => (
+            <div key={i}
+              className="reveal bg-white rounded-2xl p-7 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300"
+              style={{ borderColor: 'rgba(196,69,105,0.1)', transitionDelay: `${i * 0.1}s` }}>
+              {/* Stars */}
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, si) => (
+                  <i key={si} className={`fas fa-star text-sm ${si < t.rating ? '' : 'text-gray-200'}`}
+                    style={{ color: si < t.rating ? 'var(--color-cta)' : undefined }} />
+                ))}
+              </div>
+              {/* Quote */}
+              <p className="text-sm leading-relaxed mb-5" style={{ color: '#555' }}>
+                &ldquo;{t.text}&rdquo;
+              </p>
+              {/* Avatar overlap */}
+              <div className="flex items-center gap-4">
+                <div className="avatar-overlap">
+                  <div className="avatar-item">
+                    <img src={t.img} alt={t.name} className="w-full h-full object-cover"
+                      onError={(e) => { e.target.style.display = 'none'; }} />
                   </div>
                 </div>
-              );
-            })}
-          </div>
+                <div>
+                  <strong className="block text-sm text-[var(--color-ink)]">{t.name}</strong>
+                  <span className="text-xs" style={{ color: 'var(--color-primary)' }}>
+                    {t.role} &middot; {t.location}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

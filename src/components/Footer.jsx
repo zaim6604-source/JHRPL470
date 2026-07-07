@@ -1,127 +1,95 @@
-const quickLinks = [
-  { label: "Trade Categories", href: "#trades" },
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact" },
-];
+import { useEffect, useRef } from 'react';
 
-const trades = [
-  "Welder", "Electrician", "Plumber", "Mason", "Steel Fixer",
-  "Carpenter", "HVAC Tech", "Heavy Driver", "Pipe Fitter",
+const quickLinks = [
+  { label: 'Home', href: '#home' },
+  { label: 'About', href: '#about' },
+  { label: 'Services', href: '#services' },
+  { label: 'Destinations', href: '#destinations' },
+  { label: 'Process', href: '#process' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 export default function Footer() {
-  const scrollTo = (href) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  const scrollTo = (e, href) => {
+    e.preventDefault();
+    const el = document.querySelector(href);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: 'smooth' });
   };
 
   return (
-    <footer className="bg-highlight text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <footer className="relative overflow-hidden" style={{ background: '#9C2A52' }} ref={ref}>
+      <div className="blob blob-amber" style={{ width: 400, height: 400, top: '-30%', right: '-10%', opacity: 0.06 }} />
+
+      <div className="max-w-[1180px] mx-auto px-6 pt-16 pb-0 relative z-10">
+        <div className="reveal grid sm:grid-cols-2 gap-12 mb-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                <i className="fas fa-gear text-white"></i>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0 shadow-lg"
+                style={{ background: 'var(--color-cta)' }}>
+                <i className="fas fa-briefcase text-base" style={{ color: 'var(--color-ink)' }} />
               </div>
-              <div className="leading-tight">
-                <h3 className="font-heading text-sm font-bold text-white">Bukhari Trade Test</h3>
-                <p className="text-cta text-[10px] font-bold tracking-widest uppercase">Center Mardan</p>
+              <div className="flex flex-col leading-tight">
+                <span className="font-bold text-[1.05rem] text-white">Zahid Buneri</span>
+                <span className="text-[0.6rem] text-white/50 font-medium uppercase tracking-wider">Overseas Recruiting Agent</span>
               </div>
             </div>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cta/20 text-cta border border-cta/30 mb-4">
-              Trade Testing
-            </span>
-            <p className="text-sm text-white/60 leading-relaxed">
-              Professional trade testing and certification center in Mardan, KPK. Preparing skilled
-              workers for overseas employment since 2012.
+            <p className="text-sm text-white/50 leading-[1.75]">
+              Your local connection to jobs across the Gulf. Based in Cheena Kalay, Buner — honest, personal guidance from first call to departure.
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-5">
-              Quick Links
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {quickLinks.map(({ label, href }) => (
-                <li key={label}>
-                  <button
-                    onClick={() => scrollTo(href)}
-                    className="text-sm text-white/60 hover:text-cta transition-colors duration-200 flex items-center gap-2"
-                  >
-                    <i className="fas fa-chevron-right text-[8px] text-cta"></i>
-                    {label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Trades */}
-          <div>
-            <h4 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-5">
-              Trades We Test
-            </h4>
-            <ul className="flex flex-col gap-2">
-              {trades.map((t) => (
-                <li key={t} className="text-sm text-white/60 flex items-center gap-2">
-                  <i className="fas fa-wrench text-[10px] text-cta/60"></i>
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-5">
-              Contact
-            </h4>
-            <ul className="flex flex-col gap-4">
-              <li>
-                <a
-                  href="https://wa.me/923005719948"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-3 text-sm text-white/60 hover:text-cta transition-colors"
-                >
-                  <i className="fab fa-whatsapp text-cta mt-0.5 text-sm"></i>
-                  0300-5719948
+          {/* Quick links + Contact */}
+          <div className="grid sm:grid-cols-2 gap-8">
+            <div>
+              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-5">Quick Links</h4>
+              <ul className="flex flex-col gap-2.5">
+                {quickLinks.map(l => (
+                  <li key={l.href}>
+                    <a href={l.href} onClick={e => scrollTo(e, l.href)}
+                      className="flex items-center gap-2 text-sm text-white/45 hover:text-white hover:pl-1 transition-all">
+                      <i className="fas fa-chevron-right text-[0.55rem]" style={{ color: 'var(--color-cta)' }} /> {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-5">Contact</h4>
+              <div className="flex flex-col gap-4">
+                <a href="https://wa.me/923345577225" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-sm text-white/45 hover:text-white transition-all">
+                  <i className="fab fa-whatsapp" style={{ color: 'var(--color-cta)' }} />
+                  0334-5577225
                 </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:info@bukharitradetest.pk"
-                  className="flex items-start gap-3 text-sm text-white/60 hover:text-cta transition-colors"
-                >
-                  <i className="fas fa-envelope text-cta mt-0.5 text-sm"></i>
-                  info@bukharitradetest.pk
+                <a href="mailto:info@zahidburneri.pk"
+                  className="flex items-center gap-3 text-sm text-white/45 hover:text-white transition-all">
+                  <i className="fas fa-envelope" style={{ color: 'var(--color-cta)' }} />
+                  info@zahidburneri.pk
                 </a>
-              </li>
-              <li>
-                <div className="flex items-start gap-3">
-                  <i className="fas fa-location-dot text-cta mt-0.5 text-sm"></i>
-                  <div className="text-sm text-white/60">
-                    <p>5XQ2+94P, Mardan,</p>
-                    <p>23200, KPK</p>
-                  </div>
+                <div className="flex items-start gap-3 text-sm text-white/45">
+                  <i className="fas fa-map-marker-alt mt-0.5" style={{ color: 'var(--color-cta)' }} />
+                  Cheena Kalay, Buner, KPK
                 </div>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/40 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} Bukhari Trade Test Center. All rights reserved.
-          </p>
-          <p className="text-xs text-white/40">
-            Mardan, KPK — Trade Testing & Certification
-          </p>
+      {/* Bottom bar */}
+      <div className="border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+        <div className="max-w-[1180px] mx-auto px-6 py-5 text-center">
+          <p className="text-xs text-white/30">&copy; 2026 Zahid Buneri. All rights reserved. | Overseas Recruiting Agent, Cheena Kalay, Buner.</p>
         </div>
       </div>
     </footer>

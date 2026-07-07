@@ -1,50 +1,63 @@
+import { useEffect, useRef } from 'react';
+import SectionHeader from './SectionHeader';
+
 const steps = [
-  { num: "1", title: "Register & Pick Trade", desc: "Contact us via WhatsApp to register and select the trade you want to be tested in." },
-  { num: "2", title: "Report to Center", desc: "Visit our testing center in Mardan at your scheduled time with your tools and ID." },
-  { num: "3", title: "Practical Test", desc: "Perform hands-on tasks in your trade under the observation of our experienced assessors." },
-  { num: "4", title: "Assessment & Grading", desc: "Your performance is evaluated against international standards and assigned a grade." },
-  { num: "5", title: "Certificate Issued", desc: "Receive your trade test certificate, skill report, and video/photo records." },
+  { num: '01', icon: 'fa-pen-to-square',  title: 'Reach Out',         desc: 'Contact me via WhatsApp or fill the enquiry form. Tell me about your skills, experience, and desired country.' },
+  { num: '02', icon: 'fa-phone',          title: 'Consultation',      desc: 'I discuss your profile and preferences to identify the best job opportunities for you.' },
+  { num: '03', icon: 'fa-file-contract',  title: 'Documentation & Visa', desc: 'I help compile documents, coordinate medical checks, and guide you through the visa process.' },
+  { num: '04', icon: 'fa-plane',          title: 'Job Match & Offer', desc: 'I connect you with verified employers, arrange interviews, and help secure your job offer.' },
+  { num: '05', icon: 'fa-circle-check',   title: 'Departure',         desc: 'Pre-departure briefing, travel arrangements, and support to ensure a smooth start abroad.' },
 ];
 
 export default function Process() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    ref.current?.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section id="process" className="py-20 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-center mb-14">
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-primary/10 text-primary border border-primary/20">
-            HOW IT WORKS
-          </span>
+    <section id="process" className="py-24 relative overflow-hidden" ref={ref}
+      style={{ background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)' }}>
+      {/* Pattern overlay */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)',
+          backgroundSize: '32px 32px',
+        }} />
+
+      <div className="max-w-[900px] mx-auto px-6 relative z-10">
+        <div className="reveal">
+          <SectionHeader tag="HOW IT WORKS" title="My 5-Step Process" light
+            sub="A simple, clear path from application to departure." />
         </div>
 
-        <div className="relative bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-3xl p-8 md:p-12">
-          {/* Arrow flow */}
-          <div className="grid md:grid-cols-5 gap-6">
-            {steps.map((step, i) => (
-              <div key={step.num} className="relative flex flex-col items-center text-center">
-                {/* Number badge */}
-                <div className="w-12 h-12 rounded-full bg-primary text-white font-heading font-extrabold text-lg flex items-center justify-center shadow-lg mb-4">
-                  {step.num}
+        <div className="relative">
+          {/* Connecting line */}
+          <div className="hidden lg:block absolute left-[42px] top-0 bottom-0 w-0.5 bg-white/30" />
+
+          <div className="flex flex-col gap-8">
+            {steps.map((s, i) => (
+              <div key={i}
+                className="reveal step-card relative flex flex-col sm:flex-row items-start gap-6 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 transition-all"
+                style={{ transitionDelay: `${i * 0.1}s` }}>
+
+                {/* Big number */}
+                <div className="flex-shrink-0 w-[84px] h-[84px] rounded-2xl flex flex-col items-center justify-center text-white font-black text-lg relative z-10 bg-white/20 backdrop-blur-sm border border-white/20">
+                  <span className="text-[0.5rem] font-bold uppercase tracking-wider opacity-70">Step</span>
+                  {s.num}
                 </div>
 
-                {/* Arrow connector */}
-                {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-6 -right-4 text-accent/40">
-                    <i className="fas fa-arrow-right text-xl"></i>
+                <div className="flex-1 min-w-0 pt-1">
+                  <div className="flex items-center gap-3 mb-1.5">
+                    <i className={`fas ${s.icon} text-white/80 text-sm`} />
+                    <h3 className="text-lg font-bold text-white">{s.title}</h3>
                   </div>
-                )}
-
-                {/* Content */}
-                <div className="bg-white rounded-xl p-4 shadow-sm border border-primary/10 w-full">
-                  <h3 className="font-heading text-sm font-bold text-ink mb-1">{step.title}</h3>
-                  <p className="text-xs text-ink/70 leading-relaxed">{step.desc}</p>
+                  <p className="text-sm leading-[1.7] text-white/75">{s.desc}</p>
                 </div>
-
-                {/* Mobile connector */}
-                {i < steps.length - 1 && (
-                  <div className="md:hidden my-2 text-primary/30">
-                    <i className="fas fa-chevron-down"></i>
-                  </div>
-                )}
               </div>
             ))}
           </div>
